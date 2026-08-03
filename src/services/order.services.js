@@ -16,10 +16,10 @@ import Swal from "sweetalert2";
 
 // Create Order
 
-export const createOrder = async (user, item, deliveryAddress) => {
+export const createOrder = async (user, item, shippingAddress) => {
     try{
 
-        const orderData = {
+        const orderdata = {
             //Buyer
             buyerId: user.uid,
             buyerName: user.displayName || "",
@@ -38,10 +38,12 @@ export const createOrder = async (user, item, deliveryAddress) => {
             quantity: Number(item.quantity),
 
             // delivery address
-            deliveryAddress,
+            deliveryAddress: shippingAddress,
 
             // status
             orderStatus: "pending",
+
+            paymentMethod: "COD",
             paymentStatus: "pending",
 
             createdAt: serverTimestamp(),
@@ -49,7 +51,7 @@ export const createOrder = async (user, item, deliveryAddress) => {
 
         } ;
 
-        const orderRef = await addDoc(collection(db, "Orders"), orderData);
+        const orderRef = await addDoc(collection(db, "Orders"), orderdata);
 
 
 
@@ -73,6 +75,72 @@ export const createOrder = async (user, item, deliveryAddress) => {
     
 }
 
+// Create Order for multiple items
+
+export const createOrderForMultipleItems = async (user, cartItems, shippingAddress, shippingMethod, paymentMethod) => {
+    try{
+
+        console.log(user, cartItems, shippingAddress, shippingMethod, paymentMethod) 
+
+        if (!cartItems || cartItems.length === 0) {
+            throw new Error("Cart is empty");
+        }
+
+        const orderData = {
+            //Buyer
+            buyerId: user.uid,
+            buyerName: user.displayName || "",
+            buyerEmail: user.email || "",
+
+    
+
+            // books
+            items: cartItems.map((item)=>({
+                productId: item.productId,
+                productTitle: item.title,
+                productImage: item.imageURL || "",
+                price: Number(item.price),
+                quantity: Number(item.quantity),
+
+                // seller
+                sellerId: item.sellerId,
+                sellerName: item.sellerName || "",
+            })),
+            
+
+            // delivery address
+            shippingMethod: shippingMethod,
+            deliveryAddress: shippingAddress,
+
+            // status
+            orderStatus: "pending",
+
+            paymentMethod: paymentMethod,
+            paymentStatus: "pending",
+
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+        };
+
+        const orderRef = await addDoc(collection(db, "Orders"), orderData);
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Your Order Created',
+            confirmButtonColor: '#FFD22F'
+        })
+
+        return orderRef.id;
+
+    }catch(error){
+        Swal.fire({
+            icon: "warning",
+            title: "Error getting buyer orders:",
+            text: error.message,
+            confirmButtonColor: "#facc15",
+        });
+    }
+}
 
 // Get Buyer orders
 

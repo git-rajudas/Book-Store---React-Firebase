@@ -24,7 +24,7 @@ export const addToCart = async (user, product) => {
                     quantity: 1,
                     
                     sellerId: product.sellerId,
-                    sellerName: product.sellerId,
+                    sellerName: product.displayName || "",
 
                     createdAt: serverTimestamp(),
                 }

@@ -34,7 +34,7 @@ export const createListing = async (user, { name, isbn, price, coverpic }) => {
         photoURL: user.photoURL || "",
 
         sellerId: user.uid,
-        sellerName: user.displayName,
+        sellerName: user.displayName || "",
         status: "available",
 
         createdAt: serverTimestamp(),

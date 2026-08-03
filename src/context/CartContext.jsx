@@ -74,9 +74,10 @@ export const CartContextProvider = ({ children }) => {
     const totalQuantity = cartItems.reduce((sum, item) => sum + Number(item.quantity), 0);
 
     const totalAmount = cartItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
+    const totalAmountWithShippingCharge = Number(totalAmount+50)
 
     return (
-        <CartContext.Provider value={{loading, cartItems, totalAmount, totalQuantity, addItem, removeItem}}>
+        <CartContext.Provider value={{loading, cartItems, totalAmount, totalAmountWithShippingCharge, totalQuantity, addItem, removeItem}}>
             {children}
         </CartContext.Provider>
     )

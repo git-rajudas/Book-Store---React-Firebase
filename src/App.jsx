@@ -9,6 +9,7 @@ import UserProfile from "./pages/UserProfile"
 import Cart from "./pages/Cart"
 import Bookpage from "./pages/Bookpage"
 import PublicRoute from "./components/PublicRoute"
+import CheckoutPage from "./pages/CheckoutPage"
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Route path="/book/:id" element={<ProtectedRoute> <Bookpage /> </ProtectedRoute>}/>
       <Route path="/my-account" element={<ProtectedRoute><UserProfile /> </ProtectedRoute>}/>
       <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>}/>
+      <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>}/>
     </Routes>
   )
 }
