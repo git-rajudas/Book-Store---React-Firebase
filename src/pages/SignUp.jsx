@@ -4,7 +4,7 @@ import { signUp, signInWithGoogle } from '../services/auth.services'
 import { addUser, updateUserProfile } from '../services/user.services';
 
 import { RiGoogleFill } from '@remixicon/react'
-import Navbar from '../components/Navbar';
+
 function SignUp() {
 
     const [name, setName ] = useState(null);
@@ -29,8 +29,7 @@ function SignUp() {
     }
 
     return (
-        <div className='w-full h-fit'>
-            <Navbar />
+        <div className='w-full h-full'>
             <section className="text-gray-600 body-font h-10/12 w-full mt-40 mb-40 justify-center items-center flex">
                
                     <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg py-10 px-15 flex flex-col  w-full mt-10 md:mt-0 shadow-[0px 10px 15px -3px] shadow-(color:rgb (0,0,0.1));">

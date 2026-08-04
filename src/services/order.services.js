@@ -14,10 +14,22 @@ import { db } from "../firebase/config";
 
 import Swal from "sweetalert2";
 
-// Create Order
+// Create Order single item
 
-export const createOrder = async (user, item, shippingAddress) => {
+export const createOrder = async (user, item, shippingAddress, shippingMethod, paymentMethod) => {
+    
     try{
+
+        if (item.sellerId === user.uid) {
+            Swal.fire({
+                icon: "warning",
+                title: "You are the owner of this item.",
+                text: "Therefore, you cannot order the item you have listed.",
+                confirmButtonColor: "#facc15",
+            });
+
+            return null;
+        }
 
         const orderdata = {
             //Buyer
@@ -31,25 +43,27 @@ export const createOrder = async (user, item, shippingAddress) => {
             sellerName: item.sellerName || "",
 
             // book
-            productId: item.uid,
+            productId: item.id,
             productTitle: item.name,
             productImage: item.imageURL || "",
             price: Number(item.price),
-            quantity: Number(item.quantity),
+            quantity: 1,
 
             // delivery address
+            shippingMethod: shippingMethod,
             deliveryAddress: shippingAddress,
 
             // status
             orderStatus: "pending",
 
-            paymentMethod: "COD",
+            paymentMethod: paymentMethod,
             paymentStatus: "pending",
 
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
 
         } ;
+
 
         const orderRef = await addDoc(collection(db, "Orders"), orderdata);
 
@@ -84,6 +98,19 @@ export const createOrderForMultipleItems = async (user, cartItems, shippingAddre
 
         if (!cartItems || cartItems.length === 0) {
             throw new Error("Cart is empty");
+        }
+
+        const ownItem = cartItems.find((item)=> item.sellerId === user.uid);
+
+        if (ownItem) {
+            Swal.fire({
+                icon: "warning",
+                title: "You own these items.",
+                text: "Therefore, you cannot place an order for the items you have listed.",
+                confirmButtonColor: "#facc15",
+            });
+
+            return null;
         }
 
         const orderData = {
@@ -146,13 +173,13 @@ export const createOrderForMultipleItems = async (user, cartItems, shippingAddre
 
 export const getBuyerOrders =  async (user) => {
     try{
-        const q = query(collection(db, "Orders"), where("buyerId", "==", user.id));
+        const q = query(collection(db, "Orders"), where("buyerId", "==", user.uid));
         
         const snapshot = await getDocs(q);
 
         return snapshot.docs.map((doc)=>({
             id: doc.id,
-            ...doc.data(),
+            ...doc.data()
         }));
 
     }catch(error){
@@ -170,15 +197,15 @@ export const getBuyerOrders =  async (user) => {
 
 export const getSellerOrders =  async (user) => {
     try{
-        const q = query(collection(db, "Orders"), where("sellerId", "==", user.id));
+        const q = query(collection(db, "Orders"), where("sellerId", "==", user.uid));
         
         const snapshot = await getDocs(q);
 
         return snapshot.docs.map((doc)=>({
             id: doc.id,
-            ...doc.data(),
+            ...doc.data()
         }));
-
+        
     }catch(error){
         Swal.fire({
             icon: "warning",
@@ -202,10 +229,12 @@ export const getOrder =  async (orderId) => {
             return null;
         }
 
-        return snapshot.docs.map((doc)=>({
-            id: doc.id,
-            ...doc.data(),
-        }));
+        if (snapshot.exists()) {
+        return {
+            id: snapshot.id,
+            ...snapshot.data()
+        };
+    }
 
     }catch(error){
         Swal.fire({

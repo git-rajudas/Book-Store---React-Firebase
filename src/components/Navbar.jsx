@@ -9,7 +9,7 @@ function Navbar() {
   const {user} = useAuth();
 
   return (
-    <div className="text-gray-600 body-font bg-amber-100 sticky">
+    <div className="text-gray-600 body-font bg-amber-100 fixed left-0 right-0 z-50 w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] ">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
         <NavLink to={"/"} className="flex title-font font-medium items-center justify-center text-gray-700 mb-4 md:mb-0 cursor-pointer ">
          <div className="bg-yellow-400 p-4 rounded-full text-shadow-gray-600">

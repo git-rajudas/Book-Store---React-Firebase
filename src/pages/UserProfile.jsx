@@ -9,24 +9,25 @@ import {
 } from "@remixicon/react";
 import Swal from "sweetalert2";
 
-import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
-import { getUser, sendUserEmailVerification } from "../services/user.services";
-import { useEffect, useState } from "react";
-import { getListedProducts } from "../services/product.services";
+import { useUser } from "../context/UserContext";
+import { sendUserEmailVerification } from "../services/user.services";
+import { useState } from "react";
+
 
 import { uploadProfileImage } from "../services/cloudinary.services"
 import { updateUserProfilePic, updateUserShippingAddress, updateUserBillingAddress } from "../services/user.services";
 
 
 import Popup from "../components/Popup";
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 
 function UserProfile() {
     const { user, loading } = useAuth();
+    const {userData, ListedBook } = useUser();
 
-    const [userData, setUserData] = useState(null);
-    const [ListedBook, setListBook] = useState([]);
+    // const [userData, setUserData] = useState(null);
+    // const [ListedBook, setListBook] = useState([]);
 
 
     const [profilepic, setProfilepic] = useState(null)
@@ -42,29 +43,6 @@ function UserProfile() {
     const [ country, setCountry ] = useState("");
     const [ pincode, setPincode ] = useState("");
     const [ address, setAddress ] = useState({});
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (!user) return;
-            const data = await getUser(user.uid);
-            setUserData(data);
-        }
-
-        fetchUserData();
-    }, [user])
-
-
-
-    useEffect(() => {
-        if (!user) return;
-        const fetchUserListing = async () => {
-            if (!user) return;
-            const Books = await getListedProducts(user);
-            setListBook(Books)
-        }
-        fetchUserListing()
-    }, [user]);
-
 
 
     const handleUploadProfilePic = async (e) => {
@@ -177,8 +155,7 @@ function UserProfile() {
     }
 
     return (
-        <div className="w-full h-full">
-            <Navbar />
+        <div className="w-full">
             <Popup isOpen={isOpen} btnText={"Submit"} onClose={()=>isOpen(false)} onSubmit={handleUploadProfilePic}>
                 <div className="flex flex-col justify-between items-center mb-5">
                     <label htmlFor="uploadProfile" className="flex flex-col justify-between items-center w-full h-auto py-10 bg-amber-200 rounded-xl border-2 border-yellow-600 border-dashed">
@@ -272,7 +249,7 @@ function UserProfile() {
             <div className="w-full mt-20 flex justify-between pl-20 p-10 gap-10">
                 <div className="flex gap-10">
                     <div className="w-[150px] h-[150px] relative bg-amber-300 rounded-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
-                        <img className="rounded-full "
+                        <img className="w-[150px] h-[150px] rounded-full "
                             src={userData?.photoURL}
                             alt=""
                         />

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Navbar from "../components/Navbar";
 import { createListing } from "../services/product.services";
 import { useAuth } from "../context/AuthContext";
 
@@ -17,8 +16,7 @@ function AddBook() {
     }
 
     return (
-        <div className="h-full relative">
-        <Navbar />
+        <div className="">
         <section className="text-gray-600 body-font h-full w-full absolute">
                 <div className="justify-center flex flex-wrap items-center w-full h-[100%]">
                     <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg py-10 px-15 flex flex-col  w-full mt-10 md:mt-0 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)];">

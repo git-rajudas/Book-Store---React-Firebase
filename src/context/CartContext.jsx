@@ -5,6 +5,7 @@ import {
     getCart,
     addToCart,
     removeFromCart,
+    clearCart,
 } from "../services/cart.services";
 
 const CartContext = createContext();
@@ -71,13 +72,25 @@ export const CartContextProvider = ({ children }) => {
          }
     }
 
+    const clearCartItems = async () => {
+        if(!user) return;
+
+        try{
+            await clearCart(user);
+            setItems([]);
+        }catch(error){
+            console.error("Failed to clear cart:", error);
+            throw error;
+        }
+    }
+
     const totalQuantity = cartItems.reduce((sum, item) => sum + Number(item.quantity), 0);
 
     const totalAmount = cartItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
     const totalAmountWithShippingCharge = Number(totalAmount+50)
 
     return (
-        <CartContext.Provider value={{loading, cartItems, totalAmount, totalAmountWithShippingCharge, totalQuantity, addItem, removeItem}}>
+        <CartContext.Provider value={{loading, cartItems, totalAmount, totalAmountWithShippingCharge, totalQuantity, addItem, removeItem, clearCartItems}}>
             {children}
         </CartContext.Provider>
     )

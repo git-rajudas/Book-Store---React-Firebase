@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { RiGoogleFill } from '@remixicon/react'
 import { NavLink } from 'react-router';
 import { signIn, signInWithGoogle } from '../services/auth.services'
-import Navbar from '../components/Navbar';
+
 import { useAuth } from '../context/AuthContext';
 function Login() {
 
@@ -21,7 +21,6 @@ function Login() {
 
     return (
         <div className="w-full h-full">
-            <Navbar />
 
             <section className="text-gray-600 body-font h-10/12 w-full flex justify-center items-center">
 

@@ -1,4 +1,4 @@
-
+import Swal from "sweetalert2";
 import { db } from "../firebase/config";
 
 import { serverTimestamp, setDoc, doc, getDoc, updateDoc, increment, deleteDoc, query, collection, getDocs } from "firebase/firestore";
@@ -6,6 +6,18 @@ import { serverTimestamp, setDoc, doc, getDoc, updateDoc, increment, deleteDoc, 
 export const addToCart = async (user, product) => {
     try {
         const itemRef = doc(db, "Carts", user.uid, "Items", product.id);
+
+        if (product.sellerId === user.uid) {
+            Swal.fire({
+                icon: "warning",
+                title: "You own this item.",
+                text: "Therefore, you cannot add this item you have listed to the cart.",
+                confirmButtonColor: "#facc15",
+            });
+
+            return;
+        }
+
         const snap = await getDoc(itemRef)
         if (snap.exists()) {
             await updateDoc(itemRef, {
@@ -63,4 +75,19 @@ export const removeFromCart = async (user, productId) => {
         throw error;
     }
     
+}
+
+
+export const clearCart = async (user) => {
+    try {
+        const q = query(collection(db, "Carts", user.uid, "Items"));
+        const querySnapshot = await getDocs(q);
+        const deletePromises = querySnapshot.docs.map((item)=> deleteDoc(doc(db, "Carts", user.uid, "Items", item.id)));
+        
+        await Promise.all(deletePromises);
+
+    }catch(error){
+        console.error("Error clearing cart:", error);
+        throw error;
+    }
 }

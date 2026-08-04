@@ -24,7 +24,6 @@ function Home() {
 
   return (
     <div className="w-full">
-      <Navbar />
       <section className="text-gray-600 body-font w-full">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-wrap -m-4">
