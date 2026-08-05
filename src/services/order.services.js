@@ -140,10 +140,10 @@ export const createOrderForMultipleItems = async (user, cartItems, shippingAddre
             deliveryAddress: shippingAddress,
 
             // status
-            orderStatus: "pending",
+            orderStatus: "Pending",
 
             paymentMethod: paymentMethod,
-            paymentStatus: "pending",
+            paymentStatus: "Pending",
 
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),

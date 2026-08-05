@@ -24,7 +24,7 @@ import { Link } from "react-router";
 
 function UserProfile() {
     const { user, loading } = useAuth();
-    const {userData, ListedBook } = useUser();
+    const {userData, ListedBook, buyerOders, sellerOrders } = useUser();
 
     // const [userData, setUserData] = useState(null);
     // const [ListedBook, setListBook] = useState([]);
@@ -145,6 +145,8 @@ function UserProfile() {
     }
 
     }
+
+console.log(buyerOders);
 
 
 
@@ -288,6 +290,15 @@ function UserProfile() {
                 </div>
             </div>
 
+
+
+
+
+            <div className="w-full flex flex-col justify-evenly mt-10">
+                <div className="px-10 pl-15 flex justify-between items-end">
+                    <div className="flex flex-col" ><div className="text-xl font-semibold">Manage Admin Section</div> <div className="text-gray-600">You can list your old books for sale.</div></div>
+                    <div className="px-6 py-2 bg-yellow-400 rounded-xl cursor-pointer">Admin</div>
+                </div>
             <div className="w-full flex justify-evenly p-10 gap-10">
                 <div className="bg-amber-50 w-1/2 px-10 py-8 rounded-xl border-2 border-yellow-400 flex flex-col gap-3 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
                     <div className="flex flex-row justify-between items-center py-3">
@@ -341,17 +352,218 @@ function UserProfile() {
 
                 <div className="bg-amber-50 w-1/2 px-10 py-8 rounded-xl border-2 border-yellow-400 flex flex-col gap-3 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
                     <div className="flex flex-row justify-between items-center py-3">
-                        <div className="font-semibold">Orders</div>
+                        <div className="font-semibold">Your Recived Orders</div>
                         <div className="bg-yellow-400 p-2 rounded-full cursor-pointer">
                             <RiEyeLine />
                         </div>
                     </div>
-                    <div></div>
+                    <div>
+                        {sellerOrders.length === 0 ? (
+                            <div className="text-center text-gray-500">
+                                No Book Listed.
+                            </div>
+
+                        ) : (
+                            <div className="w-full mx-auto overflow-auto">
+                                <table className="table-auto w-full text-left whitespace-no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400 rounded-tl-xl rounded-bl-xl">Order Id</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Order Date</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Total Item</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400 rounded-tr-xl rounded-br-xl">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='w-full '>
+                                        {
+                                            sellerOrders.map((order) => {
+                                                return (
+                                                    <tr key={order.id}>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-yellow-600"><Link>{order.id.slice(0,5)}</Link></td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3">{order.createdAt.toDate().toLocaleString("en-IN",{dateStyle: "medium"})}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3">x{order.items?(order.items.reduce((sum,item)=> sum + item.quantity , 0)):(order.quantity)}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">{order.items?(Number(order.items.reduce((sum,item)=> sum + item.price , 0))+50):(Number(order.price)+50)}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        )}
+
+
+
+                    </div>
+                    <div className="flex justify-center items-center px-3 py-1 text-yellow-500 cursor-pointer">
+                        Manage Orders
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div className="w-full flex flex-col justify-evenly mt-10">
+                <div className="px-10 pl-15 flex justify-between items-end">
+                    <div className="text-xl font-semibold">My Orders</div>
+                    <div className="px-6 py-2 rounded-xl cursor-pointer"></div>
+                </div>
+
+            <div className="w-full flex justify-evenly p-10 gap-10">
+                {/* <div className="bg-amber-50 w-1/2 px-10 py-8 rounded-xl border-2 border-yellow-400 flex flex-col gap-3 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
+                    <div className="flex flex-row justify-between items-center py-3">
+                        <div className="font-semibold">List Of Book</div>
+                        <Link to={'/book/addbook'} className="bg-yellow-400 p-2 rounded-full cursor-pointer">
+                            <RiStickyNoteAddFill />
+                        </Link>
+                    </div>
+                    <div>
+                        {ListedBook.length === 0 ? (
+                            <div className="text-center text-gray-500">
+                                No Book Listed.
+                            </div>
+
+                        ) : (
+                            <div className="w-full mx-auto overflow-auto">
+
+                                <table className="table-auto w-full text-left whitespace-no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400 rounded-tl-xl rounded-bl-xl">Image</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Product</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400 rounded-tr-xl rounded-br-xl">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='w-full '>
+                                        {
+                                            ListedBook.map((item) => {
+                                                return (
+                                                    <tr key={item.id}>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3"><img className='w-[50px] h-[60px]' src={item.imageURL} alt="" /></td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3">{item.name}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">{item.price}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        )}
+
+
+
+                    </div>
+                    <div className="flex justify-center items-center px-3 py-1 text-yellow-500 cursor-pointer">
+                        View More
+                    </div>
+                </div> */}
+
+                <div className="bg-amber-50 w-full px-10 py-8 rounded-xl border-2 border-yellow-400 flex flex-col gap-3 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
+                    <div className="flex flex-row justify-end items-end py-3">
+                        <div className="bg-yellow-400 p-2 rounded-full cursor-pointer">
+                            <RiEyeLine />
+                        </div>
+                    </div>
+                    <div>
+                        {buyerOders.length === 0 ? (
+                            <div className="text-center text-gray-500">
+                                You Nothing Order Go To <Link className="text-yellow-400" to={'/store'}>Shop</Link>.
+                            </div>
+
+                        ) : (
+                            <div className="w-full mx-auto overflow-auto">
+
+                                <table className="table-auto w-full text-center whitespace-no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400 rounded-tl-xl rounded-bl-xl">Order Id</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Order Date</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Total Item</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Price</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Order Status</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400  ">Payment Status</th>
+                                            <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-yellow-400 rounded-tr-xl rounded-br-xl">Payment Method</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='w-full '>
+                                        {
+                                            buyerOders.map((order) => {
+                                                return (
+                                                    <tr key={order.id}>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-yellow-600"><Link to={`/order-success/${order.id}`}>{order.id.slice(0,5)}</Link></td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3">{order.createdAt.toDate().toLocaleString("en-IN",{dateStyle: "medium"})}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3">x{order.items?(order.items.reduce((sum,item)=> sum + item.quantity , 0)):(order.quantity)}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">{order.items?(Number(order.items.reduce((sum,item)=> sum + item.price , 0))+50):(Number(order.price)+50)}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">{order.orderStatus}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">{order.paymentStatus}</td>
+                                                        <td className=" border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">{order.paymentMethod}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        )}
+
+
+
+                    </div>
                     <div className="flex justify-center items-center px-3 py-1 text-yellow-500 cursor-pointer">
                         View More
                     </div>
                 </div>
             </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <div className="w-full flex justify-evenly p-10 gap-10">
                 <div className="bg-amber-50 w-1/2 px-10 py-8 rounded-xl border-2 border-yellow-400 flex flex-col gap-3 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">

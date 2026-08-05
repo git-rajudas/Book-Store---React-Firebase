@@ -430,6 +430,8 @@ function CheckoutPage() {
                   <div>₹{item? (item.price)+50 : totalAmountWithShippingCharge}</div>
                 </div>
               </div>
+
+              
               <div className="w-full flex justify-between items-center gap-2 my-4">
                 <label
                   htmlFor="COD"
