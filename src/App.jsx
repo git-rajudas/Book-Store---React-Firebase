@@ -12,6 +12,9 @@ import PublicRoute from "./components/PublicRoute"
 import CheckoutPage from "./pages/CheckoutPage"
 import Layout from "./Layout"
 import OrderSuccess from "./components/OrderSuccess"
+import DashboardLayout from "./components/layouts/DashboardLayout"
+import DashboardHome from "./pages/DashboardHome"
+import Orders from "./pages/Orders"
 
 
 function App() {
@@ -26,6 +29,10 @@ function App() {
         <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>}/>
         <Route path="/checkout/:ItemId" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>}/>
         <Route path="/order-success/:orderId" element={<ProtectedRoute><OrderSuccess /> </ProtectedRoute>}/>
+      </Route>
+      <Route element={<DashboardLayout/>}>
+        <Route index element={<DashboardHome/>} />
+        <Route path="/seller/orders" element={<Orders/>} />
       </Route>
       <Route path="/login" element={ <PublicRoute> <Login /> </PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><SignUp /> </PublicRoute>}/>
