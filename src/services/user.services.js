@@ -15,7 +15,10 @@ export const addUser = async (user) => {
             photoURL: user.photoURL || "",
             email: user.email,
             phoneNumber: user.phoneNumber,
-            role: 'customer',
+            roles: {
+                user: true,
+                admin: false,
+            },
 
             shippingAddress: {
                 addressLine1: "",

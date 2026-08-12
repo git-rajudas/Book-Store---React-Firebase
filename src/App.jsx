@@ -15,6 +15,10 @@ import OrderSuccess from "./components/OrderSuccess"
 import DashboardLayout from "./components/layouts/DashboardLayout"
 import DashboardHome from "./pages/DashboardHome"
 import Orders from "./pages/Orders"
+import Products from "./pages/Products"
+import Paymets from "./pages/Paymets"
+import Setting from "./pages/Setting"
+import OrderManage from "./pages/OrderManage"
 
 
 function App() {
@@ -31,8 +35,12 @@ function App() {
         <Route path="/order-success/:orderId" element={<ProtectedRoute><OrderSuccess /> </ProtectedRoute>}/>
       </Route>
       <Route element={<DashboardLayout/>}>
-        <Route index element={<DashboardHome/>} />
-        <Route path="/seller/orders" element={<Orders/>} />
+        <Route path="/dashboard" element={<DashboardHome/>} />
+        <Route path="/seller/products" element={<Products />} />
+        <Route path="/seller/orders" element={<Orders />} />
+        <Route path="/seller/order/:orderId" element={<OrderManage />} />
+        <Route path="/seller/payments" element={<Paymets/>} />
+        <Route path="/seller/setting" element={<Setting/>} />
       </Route>
       <Route path="/login" element={ <PublicRoute> <Login /> </PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><SignUp /> </PublicRoute>}/>

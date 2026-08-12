@@ -1,3 +1,6 @@
+// this file contains functions to handle order related operations buyer only like creating order, getting buyer orders, getting single order, etc.
+
+
 import {
     addDoc,
     collection,
@@ -6,8 +9,8 @@ import {
     getDocs,
     query,
     serverTimestamp,
-    updateDoc,
     where,
+    updateDoc
 } from "firebase/firestore";
 
 import { db } from "../firebase/config";
@@ -54,10 +57,11 @@ export const createOrder = async (user, item, shippingAddress, shippingMethod, p
             deliveryAddress: shippingAddress,
 
             // status
-            orderStatus: "pending",
+            orderStatus: "Pending",
+            fulfillmentStatus: "Unfulfilled",
 
             paymentMethod: paymentMethod,
-            paymentStatus: "pending",
+            paymentStatus: "Pending",
 
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
@@ -113,13 +117,20 @@ export const createOrderForMultipleItems = async (user, cartItems, shippingAddre
             return null;
         }
 
+
+        // get sellerId for diffrent seller items
+        const sellerIds = [
+            ...new Set(cartItems.map((item)=> item.sellerId)),
+        ];
+
         const orderData = {
             //Buyer
             buyerId: user.uid,
             buyerName: user.displayName || "",
             buyerEmail: user.email || "",
 
-    
+            // seller IDs at the order document
+             sellerIds: sellerIds,
 
             // books
             items: cartItems.map((item)=>({
@@ -141,6 +152,7 @@ export const createOrderForMultipleItems = async (user, cartItems, shippingAddre
 
             // status
             orderStatus: "Pending",
+            fulfillmentStatus: "Unfulfilled",
 
             paymentMethod: paymentMethod,
             paymentStatus: "Pending",
@@ -193,28 +205,7 @@ export const getBuyerOrders =  async (user) => {
 }
 
 
-// Get seller orders
 
-export const getSellerOrders =  async (user) => {
-    try{
-        const q = query(collection(db, "Orders"), where("sellerId", "==", user.uid));
-        
-        const snapshot = await getDocs(q);
-
-        return snapshot.docs.map((doc)=>({
-            id: doc.id,
-            ...doc.data()
-        }));
-        
-    }catch(error){
-        Swal.fire({
-            icon: "warning",
-            title: "Error getting seller orders:",
-            text: error.message,
-            confirmButtonColor: "#facc15",
-        });
-    }
-}
 
 
 // Get single orders
@@ -246,25 +237,15 @@ export const getOrder =  async (orderId) => {
     }
 }
 
-
-//  update order status
-
-export const updateOrderStatus = async (orderId, status ) => {
+export const cancelOrder = async (orderId) => {
     try{
-
         const orderRef = doc(db, "Orders", orderId);
 
         await updateDoc(orderRef, {
-            orderStatus: status,
+            orderStatus: "Cancelled",
             updatedAt: serverTimestamp(),
         })
-
     }catch(error){
-        Swal.fire({
-            icon: "warning",
-            title: "Error updating order status:",
-            text: error.message,
-            confirmButtonColor: "#facc15",
-        });
+        console.error("Error cancelling order:", error);
     }
 }

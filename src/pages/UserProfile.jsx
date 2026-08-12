@@ -21,13 +21,12 @@ import { updateUserProfilePic, updateUserShippingAddress, updateUserBillingAddre
 
 import Popup from "../components/Popup";
 import { Link } from "react-router";
+import { useSeller } from "../context/SellerContext";
 
 function UserProfile() {
     const { user, loading } = useAuth();
-    const {userData, ListedBook, buyerOders, sellerOrders } = useUser();
-
-    // const [userData, setUserData] = useState(null);
-    // const [ListedBook, setListBook] = useState([]);
+    const {userData, buyerOders } = useUser();
+    const { ListedProduct , sellerOrders } = useSeller();
 
 
     const [profilepic, setProfilepic] = useState(null)
@@ -145,8 +144,6 @@ function UserProfile() {
     }
 
     }
-
-console.log(buyerOders);
 
 
 
@@ -308,7 +305,7 @@ console.log(buyerOders);
                         </Link>
                     </div>
                     <div>
-                        {ListedBook.length === 0 ? (
+                        {ListedProduct.length === 0 ? (
                             <div className="text-center text-gray-500">
                                 No Book Listed.
                             </div>
@@ -326,7 +323,7 @@ console.log(buyerOders);
                                     </thead>
                                     <tbody className='w-full '>
                                         {
-                                            ListedBook.map((item) => {
+                                            ListedProduct.map((item) => {
                                                 return (
                                                     <tr key={item.id}>
                                                         <td className=" border-b-2 border-gray-200 px-4 py-3"><img className='w-[50px] h-[60px]' src={item.imageURL} alt="" /></td>
@@ -435,7 +432,7 @@ console.log(buyerOders);
                         </Link>
                     </div>
                     <div>
-                        {ListedBook.length === 0 ? (
+                        {ListedProduct.length === 0 ? (
                             <div className="text-center text-gray-500">
                                 No Book Listed.
                             </div>
@@ -453,7 +450,7 @@ console.log(buyerOders);
                                     </thead>
                                     <tbody className='w-full '>
                                         {
-                                            ListedBook.map((item) => {
+                                            ListedProduct.map((item) => {
                                                 return (
                                                     <tr key={item.id}>
                                                         <td className=" border-b-2 border-gray-200 px-4 py-3"><img className='w-[50px] h-[60px]' src={item.imageURL} alt="" /></td>
