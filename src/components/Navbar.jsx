@@ -20,93 +20,277 @@ function Navbar() {
   };
 
   return (
-    <div className="text-gray-600 body-font bg-amber-100 fixed left-0 right-0 z-50 w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] ">
-      <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <NavLink
-          to={"/"}
-          className="flex title-font font-medium items-center justify-center text-gray-700 mb-4 md:mb-0 cursor-pointer "
-        >
-          <div className="bg-yellow-400 p-4 rounded-full text-shadow-gray-600">
-            <RiBookShelfLine size={25} />
-          </div>
-          <span className="ml-3 text-xl">Book Store</span>
-        </NavLink>
-        <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+   <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-amber-200/70 bg-amber-50/95 shadow-sm backdrop-blur-md">
+  <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+
+    {/* Logo */}
+    <NavLink
+      to="/"
+      className="flex shrink-0 items-center gap-3"
+    >
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-400 text-gray-900 shadow-sm transition-transform duration-200 hover:scale-105">
+        <RiBookShelfLine size={24} />
+      </div>
+
+      <div className="hidden sm:block">
+        <span className="block text-lg font-bold leading-tight text-gray-900">
+          Book Store
+        </span>
+
+        <span className="text-[11px] font-medium uppercase tracking-widest text-gray-500">
+          Read. Discover. Enjoy.
+        </span>
+      </div>
+    </NavLink>
+
+    {/* Navigation */}
+    <nav className="hidden items-center gap-1 md:flex">
+
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          `rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+            isActive
+              ? "bg-yellow-400 text-gray-900 shadow-sm"
+              : "text-gray-600 hover:bg-yellow-100 hover:text-gray-900"
+          }`
+        }
+      >
+        Home
+      </NavLink>
+
+      <NavLink
+        to="/store"
+        className={({ isActive }) =>
+          `rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+            isActive
+              ? "bg-yellow-400 text-gray-900 shadow-sm"
+              : "text-gray-600 hover:bg-yellow-100 hover:text-gray-900"
+          }`
+        }
+      >
+        Store
+      </NavLink>
+
+      <NavLink
+        to="/about"
+        className={({ isActive }) =>
+          `rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+            isActive
+              ? "bg-yellow-400 text-gray-900 shadow-sm"
+              : "text-gray-600 hover:bg-yellow-100 hover:text-gray-900"
+          }`
+        }
+      >
+        About
+      </NavLink>
+
+      <NavLink
+        to="/contact"
+        className={({ isActive }) =>
+          `rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+            isActive
+              ? "bg-yellow-400 text-gray-900 shadow-sm"
+              : "text-gray-600 hover:bg-yellow-100 hover:text-gray-900"
+          }`
+        }
+      >
+        Contact
+      </NavLink>
+
+      {/* Account */}
+      {user ? (
+        <div className="group relative ml-1">
+
           <NavLink
-            to={"/"}
-            className="mr-5 hover:text-yellow-600 cursor-pointer"
+            to="/my-account"
+            className={({ isActive }) =>
+              `flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
+                isActive
+                  ? "bg-yellow-400 text-gray-900"
+                  : "text-gray-700 hover:bg-yellow-100"
+              }`
+            }
           >
-            Home
+            My Account
+            <RiArrowDropDownLine
+              size={21}
+              className="transition-transform duration-200 group-hover:rotate-180"
+            />
           </NavLink>
-          <NavLink
-            to={"/store"}
-            className="mr-5 hover:text-yellow-600 cursor-pointer"
-          >
-            Store
-          </NavLink>
-          <NavLink
-            to={"/about"}
-            className="mr-5 hover:text-yellow-600 cursor-pointer"
-          >
-            About Us
-          </NavLink>
-          <NavLink
-            to={"/contact"}
-            className="mr-5 hover:text-yellow-600 cursor-pointer"
-          >
-            Contact Us
-          </NavLink>
-          {user ? (
-            <div className="relative mr-5 flex items-center font-semibold group">
+
+          {/* Dropdown */}
+          <div className="invisible absolute right-0 top-full w-52 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-xl">
+
               <NavLink
-                to={"/my-account"}
-                className="hover:text-yellow-600 font-semibold cursor-pointer flex"
+                to="/my-account"
+                className="flex items-center rounded-xl px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-yellow-50 hover:text-gray-900"
               >
-                MyAccount
-                <RiArrowDropDownLine size={24} />
+                My Account
               </NavLink>
 
-              <div className="absolute pt-2 top-full left-10 hidden group-hover:block">
-                <div className="bg-yellow-50 px-6 py-4 shadow-xl rounded-xl flex flex-col justify-between items-center gap-3">
-                  <NavLink to={'/dashboard'} >Dashboard</NavLink>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-400 text-white px-3 py-1 rounded-xl whitespace-nowrap hover:bg-red-500 flex justify-center items-center gap-1 cursor-pointer" 
-                  >
-                  <span className="text-end">Logout</span> <RiLogoutCircleRLine size={15}/>
-                </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <NavLink
-              to={"/login"}
-              className="mr-5 hover:text-yellow-600 cursor-pointer"
-            >
-              Login
-            </NavLink>
-          )}
-        </nav>
+              <NavLink
+                to="/dashboard"
+                className="flex items-center rounded-xl px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-yellow-50 hover:text-gray-900"
+              >
+                Dashboard
+              </NavLink>
 
-        <div className="flex justify-center items-center gap-5">
-          <NavLink to="/book/addbook">
-            <button className="inline-flex items-center justify-center gap-2 bg-yellow-400  hover:border-amber-200 py-2 px-4 focus:outline-none hover:bg-amber-300  rounded-xl text-base mt-4 md:mt-0 cursor-pointer  shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
-              Add Book
-              <RiStickyNoteAddFill />
-            </button>
-          </NavLink>
-          <NavLink
-            to={"/cart"}
-            className="relative rounded-full  border-none bg-yellow-400 hover:bg-amber-200 px-2 py-2 flex gap-3 justify-center focus:outline-none items-center cursor-pointer shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]"
-          >
-            <RiShoppingBag3Fill size={22} />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full min-w-5 h-5 flex justify-center items-center text-xs font-semibold">
-              {totalQuantity}
-            </span>
-          </NavLink>
+              <div className="my-1 border-t border-gray-100" />
+
+              <button
+                onClick={handleLogout}
+                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
+              >
+                <span>Logout</span>
+                <RiLogoutCircleRLine size={17} />
+              </button>
+
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <NavLink
+          to="/login"
+          className={({ isActive }) =>
+            `ml-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
+              isActive
+                ? "bg-gray-900 text-white"
+                : "text-gray-700 hover:bg-yellow-100"
+            }`
+          }
+        >
+          Login
+        </NavLink>
+      )}
+    </nav>
+
+    {/* Right Actions */}
+    <div className="flex items-center gap-3">
+
+      {/* Add Book */}
+      <NavLink
+        to="/book/addbook"
+        className="hidden sm:block"
+      >
+        <button
+          type="button"
+          className="flex items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition-all hover:bg-yellow-500 hover:shadow-md active:scale-95"
+        >
+          <span>Add Book</span>
+          <RiStickyNoteAddFill size={17} />
+        </button>
+      </NavLink>
+
+      {/* Cart */}
+      <NavLink
+        to="/cart"
+        className="group relative flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900 text-white shadow-sm transition-all hover:bg-yellow-400 hover:text-gray-900 active:scale-95"
+        aria-label="Shopping cart"
+      >
+        <RiShoppingBag3Fill
+          size={21}
+          className="transition-transform group-hover:scale-110"
+        />
+
+        {totalQuantity > 0 && (
+          <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-amber-50 bg-red-500 px-1 text-[10px] font-bold text-white">
+            {totalQuantity > 99 ? "99+" : totalQuantity}
+          </span>
+        )}
+      </NavLink>
+
     </div>
+  </div>
+
+  {/* Mobile Navigation */}
+  <div className="border-t border-amber-200/60 md:hidden">
+    <nav className="mx-auto flex max-w-7xl items-center justify-center gap-1 overflow-x-auto px-4 py-2">
+
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          `whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ${
+            isActive
+              ? "bg-yellow-400 text-gray-900"
+              : "text-gray-600"
+          }`
+        }
+      >
+        Home
+      </NavLink>
+
+      <NavLink
+        to="/store"
+        className={({ isActive }) =>
+          `whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ${
+            isActive
+              ? "bg-yellow-400 text-gray-900"
+              : "text-gray-600"
+          }`
+        }
+      >
+        Store
+      </NavLink>
+
+      <NavLink
+        to="/about"
+        className={({ isActive }) =>
+          `whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ${
+            isActive
+              ? "bg-yellow-400 text-gray-900"
+              : "text-gray-600"
+          }`
+        }
+      >
+        About
+      </NavLink>
+
+      <NavLink
+        to="/contact"
+        className={({ isActive }) =>
+          `whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ${
+            isActive
+              ? "bg-yellow-400 text-gray-900"
+              : "text-gray-600"
+          }`
+        }
+      >
+        Contact
+      </NavLink>
+
+      {user ? (
+        <NavLink
+          to="/my-account"
+          className={({ isActive }) =>
+            `whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ${
+              isActive
+                ? "bg-yellow-400 text-gray-900"
+                : "text-gray-600"
+            }`
+          }
+        >
+          Account
+        </NavLink>
+      ) : (
+        <NavLink
+          to="/login"
+          className={({ isActive }) =>
+            `whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ${
+              isActive
+                ? "bg-yellow-400 text-gray-900"
+                : "text-gray-600"
+            }`
+          }
+        >
+          Login
+        </NavLink>
+      )}
+
+    </nav>
+  </div>
+</header>
   );
 }
 

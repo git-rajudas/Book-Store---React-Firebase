@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "../components/Card"
 
-import Navbar from "../components/Navbar"
-
 import { getProducts } from "../services/product.services";
 import { useAuth } from "../context/AuthContext";
 
@@ -23,17 +21,32 @@ function Home() {
   },[user])
 
   return (
-    <div className="w-full">
-      <section className="text-gray-600 body-font w-full">
-        <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-wrap -m-4">
-           {products.map((product)=>
-            <Card key={product.id} product={product} />
-           )}
-          </div>
-        </div>
-      </section>
+    <div className="w-full min-h-screen bg-gray-50">
+  <section className="w-full">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      
+      <div className="mb-8">
+        <p className="text-sm font-semibold uppercase tracking-wider text-yellow-500">
+          Explore
+        </p>
+
+        <h2 className="mt-1 text-3xl font-bold text-gray-900">
+          Featured Books
+        </h2>
+
+        <p className="mt-2 text-gray-500">
+          Discover your next great read.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {products.map((product) => (
+          <Card key={product.id} product={product} />
+        ))}
+      </div>
     </div>
+  </section>
+</div>
   )
 }
 

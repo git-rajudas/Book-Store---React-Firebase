@@ -2,28 +2,62 @@ import { RiShoppingBag3Line } from "@remixicon/react"
 import { Link, NavLink } from "react-router"
 import { useAuth } from "../context/AuthContext"
 import { useCart } from "../context/CartContext";
-function Card({product}) {
-  const {user, loading} = useAuth();
+function Card({ product }) {
+  const { loading } = useAuth();
   const { addItem } = useCart();
-  if(loading)  return (
-            <div className="w-full h-full flex justify-center items-center">Loading....</div>
-        )
+  if (loading) return (
+    <div className="w-full h-full flex justify-center items-center">Loading....</div>
+  )
 
   return (
-    <div className="lg:w-1/4 md:w-1/2 p-4 w-full border-2 border-yellow-400 m-10 rounded-xl shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]">
-        <a className="block relative h-70 rounded overflow-hidden">
-          <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={product.imageURL}></img>
-        </a>
-        <div className="mt-4">
-          <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">Books</h3>
-          <NavLink to={`/book/${product.id}`} className="text-gray-900 title-font text-lg font-medium">{product.name}</NavLink>
-          <p className="mt-1">₹{product.price}</p>
-        </div>
-        <div className="mt-4 flex justify-between items-center gap-5">
-            <button onClick={()=>addItem(product)} className="rounded-full border-none bg-yellow-400 px-3 py-3 flex gap-3 justify-center items-center cursor-pointer"><RiShoppingBag3Line /></button>
-            <Link  to={`/book/${product.id}`} className="rounded-xl border-none bg-yellow-400 px-6 py-3 cursor-pointer">Buy Now</Link>
+    <div className="group w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+      <NavLink
+        to={`/book/${product.id}`}
+        className="block aspect-[4/5] overflow-hidden bg-gray-100"
+      >
+        <img
+          src={product.imageURL}
+          alt={product.name}
+          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+        />
+      </NavLink>
+
+
+      <div className="p-5">
+        <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-yellow-500">
+          Books
+        </p>
+
+        <NavLink
+          to={`/book/${product.id}`}
+          className="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors hover:text-yellow-500"
+        >
+          {product.name}
+        </NavLink>
+
+        <p className="mt-2 text-xl font-bold text-gray-900">
+          ₹{product.price}
+        </p>
+
+
+        <div className="mt-5 flex items-center gap-3">
+          <button
+            onClick={() => addItem(product)}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-yellow-400 text-xl text-gray-900 transition-all hover:bg-yellow-500 hover:shadow-md active:scale-95 cursor-pointer"
+          >
+            <RiShoppingBag3Line />
+          </button>
+
+          <Link
+            to={`/book/${product.id}`}
+            className="flex h-11 flex-1 items-center justify-center rounded-xl bg-gray-900 px-4 text-sm font-semibold text-white transition-all hover:bg-yellow-400 hover:text-gray-900 active:scale-[0.98]"
+          >
+            Buy Now
+          </Link>
         </div>
       </div>
+    </div>
   )
 }
 
