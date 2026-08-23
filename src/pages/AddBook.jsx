@@ -3,438 +3,666 @@ import { createListing } from "../services/product.services";
 import { useAuth } from "../context/AuthContext";
 import { ArrowLeft, ChevronDown, ImagePlus } from 'lucide-react'
 function AddBook() {
-    const {user } = useAuth();
+  const { user } = useAuth();
 
-    const [name, setName] = useState("");
-    const [isbn, setIsbn] = useState("");
-    const [price, setPrice] = useState("");
-    const [coverpic, setCoverpic] = useState(null);
+  const [name, setName] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [price, setPrice] = useState("");
+  const [coverpic, setCoverpic] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        await createListing(user,{name,isbn,price,coverpic});
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await createListing(user, { name, isbn, price, coverpic });
+  }
 
+  const Select = ({
+    label,
+    options = [],
+  }) => {
     return (
-        // <div className="">
-        // <section className="text-gray-600 body-font h-full w-full absolute">
-        //         <div className="justify-center flex flex-wrap items-center w-full h-[100%]">
-        //             <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg py-10 px-15 flex flex-col  w-full mt-10 md:mt-0 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)];">
-        //                 <h2 className="text-gray-900 text-2xl font-medium title-font mb-5">
-        //                     Add Book
-        //                 </h2>
-        //                 <div className="relative mb-4">
-        //                     <label htmlFor="bookName" className="leading-7 text-sm text-gray-600">
-        //                         Enter Book Name
-        //                     </label>
-        //                     <input
-        //                         type="text"
-        //                         id="bookName"
-        //                         name="bookName"
-        //                         placeholder="Book Name"
-        //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-        //                         onChange={(e) => setName(e.target.value)}
-        //                     ></input>
-        //                 </div>
-        //                 <div className="relative mb-4">
-        //                     <label htmlFor="isbn" className="leading-7 text-sm text-gray-600">
-        //                         Enter ISBN Number
-        //                     </label>
-        //                     <input
-        //                         type="text"
-        //                         id="isbn"
-        //                         name="isbn"
-        //                         placeholder="ISBN"
-        //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-        //                         onChange={(e) => setIsbn(e.target.value)}
-        //                     ></input>
-        //                 </div>
-        //                 <div className="relative mb-4">
-        //                     <label htmlFor="price" className="leading-7 text-sm text-gray-600">
-        //                         Enter Book Price
-        //                     </label>
-        //                     <input
-        //                         type="number"
-        //                         id="price"
-        //                         name="price"
-        //                         placeholder="Price"
-        //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-        //                         onChange={(e) => setPrice(e.target.value)}
-        //                     ></input>
-        //                 </div>
-        //                 <div className="relative mb-4">
-        //                     <label htmlFor="coverpic" className="leading-7 text-sm text-gray-600">
-        //                         Cover Pic
-        //                     </label>
-        //                     <input
-        //                         type="file"
-        //                         id="coverpic"
-        //                         name="coverpic"
-        //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-        //                         onChange={(e) => setCoverpic(e.target.files[0])}
-        //                     ></input>
-        //                 </div>
+      <div>
+        <label className="mb-2 block text-xs font-semibold text-gray-700">
+          {label}
+        </label>
 
-        //                 <div className="flex flex-col gap-4">
-        //                     <button
-        //                         className="text-white bg-yellow-500 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-600 rounded-2xl text-lg cursor-pointer shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]"
-        //                         onClick={handleSubmit}
-        //                     >
-        //                         Add
-        //                     </button>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </section>
-        // </div>
+        <div className="relative">
+          <select
+            className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 text-sm text-gray-700 outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
+          >
+            <option value="">
+              Select {label.toLowerCase()}
+            </option>
 
-      <div className="min-h-screen bg-[#f5f5f5] px-4 py-6 font-sans text-[#171717] sm:px-8 lg:px-[7%]">
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
 
-      {/* HEADER */}
-      <div className="mb-7 flex items-center justify-between">
-
-        <div className="flex items-center gap-2">
-          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200">
-            <ArrowLeft size={20} />
-          </button>
-
-          <h1 className="text-[24px] font-semibold">
-            Add product
-          </h1>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button className="h-10 rounded-full border border-gray-200 bg-white px-5 text-sm hover:bg-gray-50 cursor-pointer">
-            Cancel
-          </button>
-
-          <button className="h-10 rounded-full bg-[#FFD22F] px-6 text-sm font-medium text-gray-600 hover:bg-yellow-400 cursor-pointer">
-            Save product
-          </button>
+          <ChevronDown
+            size={17}
+            className="pointer-events-none absolute right-4 top-3.5 text-gray-400"
+          />
         </div>
       </div>
+    );
+  };
 
-      {/* MAIN */}
-      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
+  return (
+    // <div className="">
+    // <section className="text-gray-600 body-font h-full w-full absolute">
+    //         <div className="justify-center flex flex-wrap items-center w-full h-[100%]">
+    //             <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg py-10 px-15 flex flex-col  w-full mt-10 md:mt-0 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)];">
+    //                 <h2 className="text-gray-900 text-2xl font-medium title-font mb-5">
+    //                     Add Book
+    //                 </h2>
+    //                 <div className="relative mb-4">
+    //                     <label htmlFor="bookName" className="leading-7 text-sm text-gray-600">
+    //                         Enter Book Name
+    //                     </label>
+    //                     <input
+    //                         type="text"
+    //                         id="bookName"
+    //                         name="bookName"
+    //                         placeholder="Book Name"
+    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+    //                         onChange={(e) => setName(e.target.value)}
+    //                     ></input>
+    //                 </div>
+    //                 <div className="relative mb-4">
+    //                     <label htmlFor="isbn" className="leading-7 text-sm text-gray-600">
+    //                         Enter ISBN Number
+    //                     </label>
+    //                     <input
+    //                         type="text"
+    //                         id="isbn"
+    //                         name="isbn"
+    //                         placeholder="ISBN"
+    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+    //                         onChange={(e) => setIsbn(e.target.value)}
+    //                     ></input>
+    //                 </div>
+    //                 <div className="relative mb-4">
+    //                     <label htmlFor="price" className="leading-7 text-sm text-gray-600">
+    //                         Enter Book Price
+    //                     </label>
+    //                     <input
+    //                         type="number"
+    //                         id="price"
+    //                         name="price"
+    //                         placeholder="Price"
+    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+    //                         onChange={(e) => setPrice(e.target.value)}
+    //                     ></input>
+    //                 </div>
+    //                 <div className="relative mb-4">
+    //                     <label htmlFor="coverpic" className="leading-7 text-sm text-gray-600">
+    //                         Cover Pic
+    //                     </label>
+    //                     <input
+    //                         type="file"
+    //                         id="coverpic"
+    //                         name="coverpic"
+    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+    //                         onChange={(e) => setCoverpic(e.target.files[0])}
+    //                     ></input>
+    //                 </div>
 
-        {/* ================================================= */}
-        {/* LEFT */}
-        {/* ================================================= */}
-        <main className="flex flex-col gap-4">
+    //                 <div className="flex flex-col gap-4">
+    //                     <button
+    //                         className="text-white bg-yellow-500 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-600 rounded-2xl text-lg cursor-pointer shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]"
+    //                         onClick={handleSubmit}
+    //                     >
+    //                         Add
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </section>
+    // </div>
 
-          {/* PRODUCT INFORMATION */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
+    <div className="min-h-screen bg-gray-50 px-4 py-8 font-sans text-gray-900 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
 
-            <h2 className="mb-5 text-sm font-semibold">
-              Product information
-            </h2>
+        {/* =====================================================
+            HEADER
+        ===================================================== */}
+        <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
-            {/* TITLE */}
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
+
+            <button
+              type="button"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-gray-900 active:scale-95"
+            >
+              <ArrowLeft size={19} />
+            </button>
+
             <div>
-              <label className="mb-2 block text-xs font-medium">
-                Book title
-              </label>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                Catalog
+              </p>
 
-              <input
-                type="text"
-                placeholder="Enter book title"
-                className="h-11 w-full rounded-[10px] border border-gray-200 px-3 text-sm outline-none transition focus:border-blue-400"
-              />
+              <h1 className="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                Add Product
+              </h1>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Create a new book listing for your store.
+              </p>
             </div>
 
-            {/* DESCRIPTION */}
-            <div className="mt-5">
-              <div className="mb-2 flex items-center justify-between">
-                <label className="text-xs font-medium">
-                  Description
+          </div>
+
+          {/* ACTIONS */}
+          <div className="flex items-center gap-2">
+
+            <button
+              type="button"
+              className="h-11 rounded-xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 active:scale-[0.98]"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              className="h-11 rounded-xl bg-yellow-400 px-6 text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md active:scale-[0.98]"
+            >
+              Save Product
+            </button>
+
+          </div>
+        </div>
+
+        {/* =====================================================
+            MAIN CONTENT
+        ===================================================== */}
+        <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+
+          {/* ===================================================
+              LEFT
+          =================================================== */}
+          <main className="flex flex-col gap-6">
+
+            {/* =================================================
+                PRODUCT INFORMATION
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-7">
+
+              <div className="mb-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Product
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Product Information
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Add the basic information customers will see about this book.
+                </p>
+              </div>
+
+              {/* TITLE */}
+              <div>
+                <label className="mb-2 block text-xs font-semibold text-gray-700">
+                  Book Title
                 </label>
 
-                <span className="text-[11px] text-gray-400">
-                  0 / 5000
-                </span>
-              </div>
-
-              <textarea
-                rows={7}
-                placeholder="Write a description for your book..."
-                className="w-full resize-none rounded-[10px] border border-gray-200 p-3 text-sm outline-none focus:border-blue-400"
-              />
-            </div>
-          </section>
-
-          {/* MEDIA */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
-
-            <h2 className="mb-1 text-sm font-semibold">
-              Book cover
-            </h2>
-
-            <p className="mb-4 text-xs text-gray-400">
-              Upload the main cover image of your book.
-            </p>
-
-            <div className="flex h-[220px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100">
-
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">
-                <ImagePlus
-                  size={22}
-                  className="text-gray-500"
-                />
-              </div>
-
-              <p className="text-sm font-medium">
-                Upload book cover
-              </p>
-
-              <p className="mt-1 text-xs text-gray-400">
-                PNG, JPG or WEBP · Max 5MB
-              </p>
-            </div>
-          </section>
-
-          {/* BOOK DETAILS */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
-
-            <h2 className="mb-5 text-sm font-semibold">
-              Book details
-            </h2>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-              <Input
-                label="ISBN"
-                placeholder="978-0-0000-0000-0"
-              />
-
-              <Input
-                label="Publisher"
-                placeholder="Publisher name"
-              />
-
-              <Input
-                label="Author"
-                placeholder="Author name"
-              />
-
-              <Input
-                label="Publication date"
-                type="date"
-              />
-
-              <Input
-                label="Number of pages"
-                placeholder="320"
-                type="number"
-              />
-
-              <Select
-                label="Language"
-                options={[
-                  "English",
-                  "Indonesian",
-                  "Spanish",
-                  "French",
-                ]}
-              />
-
-              <Select
-                label="Format"
-                options={[
-                  "Paperback",
-                  "Hardcover",
-                  "eBook",
-                  "Audiobook",
-                ]}
-              />
-
-              <Input
-                label="Edition"
-                placeholder="First edition"
-              />
-            </div>
-          </section>
-
-          {/* PRICING */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
-
-            <h2 className="mb-5 text-sm font-semibold">
-              Pricing
-            </h2>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-              <Input
-                label="Price"
-                placeholder="₹0.00"
-                type="number"
-              />
-
-              <Input
-                label="Compare-at price"
-                placeholder="₹0.00"
-                type="number"
-              />
-            </div>
-          </section>
-
-          {/* INVENTORY */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
-
-            <h2 className="mb-5 text-sm font-semibold">
-              Inventory
-            </h2>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-              <Input
-                label="SKU"
-                placeholder="BOOK-001"
-              />
-
-              <Input
-                label="Stock quantity"
-                placeholder="0"
-                type="number"
-              />
-            </div>
-
-            <label className="mt-5 flex items-center gap-2 text-xs text-gray-600">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded"
-              />
-              Track inventory for this product
-            </label>
-          </section>
-        </main>
-
-        {/* ================================================= */}
-        {/* RIGHT */}
-        {/* ================================================= */}
-        <aside className="flex flex-col gap-4">
-
-          {/* STATUS */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
-
-            <h2 className="mb-4 text-sm font-semibold">
-              Product status
-            </h2>
-
-            <div className="relative">
-
-              <select
-                value={status}
-                // onChange={(e) => setStatus(e.target.value)}
-                className="h-11 w-full appearance-none rounded-[10px] border border-gray-200 bg-white px-3 text-xs outline-none focus:border-blue-400"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-                <option>Archived</option>
-              </select>
-
-              <ChevronDown
-                size={16}
-                className="pointer-events-none absolute right-3 top-3 text-gray-400"
-              />
-            </div>
-          </section>
-
-          {/* ORGANIZATION */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
-
-            <h2 className="mb-5 text-sm font-semibold">
-              Organization
-            </h2>
-
-            <Select
-              label="Category"
-              options={[
-                "Books",
-                "Fiction",
-                "Non-fiction",
-                "Education",
-                "Biography",
-              ]}
-            />
-
-            <div className="mt-4">
-              <Input
-                label="Author"
-                placeholder="Search author..."
-              />
-            </div>
-
-            <div className="mt-4">
-              <label className="mb-2 block text-xs font-medium">
-                Tags
-              </label>
-
-              <div className="flex min-h-[44px] flex-wrap items-center gap-2 rounded-[10px] border border-gray-200 p-2">
-
-                {/* {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1.5 text-xs"
-                  >
-                    {tag}
-
-                    <button
-                      onClick={() => removeTag(tag)}
-                    >
-                      <X size={13} />
-                    </button>
-                  </span>
-                ))} */}
-
                 <input
-                  placeholder="Add tag..."
-                  className="min-w-[80px] flex-1 bg-transparent px-1 text-xs outline-none"
+                  type="text"
+                  placeholder="Enter book title"
+                  className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
                 />
               </div>
-            </div>
-          </section>
 
-          {/* PUBLISHING */}
-          <section className="rounded-[17px] border border-gray-100 bg-white p-5">
+              {/* DESCRIPTION */}
+              <div className="mt-6">
 
-            <h2 className="mb-4 text-sm font-semibold">
-              Publishing
-            </h2>
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700">
+                    Description
+                  </label>
 
-            <div className="space-y-4">
+                  <span className="text-[11px] font-medium text-gray-400">
+                    0 / 5000
+                  </span>
+                </div>
 
-              <div>
-                <p className="text-xs font-medium">
-                  Online store
+                <textarea
+                  rows={7}
+                  placeholder="Write a description for your book..."
+                  className="w-full resize-none rounded-xl border border-gray-200 bg-white p-4 text-sm leading-6 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
+                />
+
+              </div>
+
+            </section>
+
+            {/* =================================================
+                MEDIA
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-7">
+
+              <div className="mb-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Media
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Book Cover
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Upload the main cover image of your book.
+                </p>
+              </div>
+
+              {/* UPLOAD */}
+              <div className="group flex min-h-[240px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 text-center transition hover:border-yellow-400 hover:bg-yellow-50/40">
+
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 transition group-hover:scale-105">
+                  <ImagePlus
+                    size={27}
+                    className="text-gray-500 transition group-hover:text-gray-700"
+                  />
+                </div>
+
+                <p className="mt-4 text-sm font-semibold text-gray-900">
+                  Upload book cover
                 </p>
 
                 <p className="mt-1 text-xs text-gray-400">
-                  Product will be visible in your store.
+                  PNG, JPG or WEBP · Maximum 5MB
+                </p>
+
+                <span className="mt-4 rounded-full bg-white px-4 py-2 text-xs font-semibold text-gray-600 shadow-sm ring-1 ring-gray-200">
+                  Choose Image
+                </span>
+
+              </div>
+
+            </section>
+
+            {/* =================================================
+                BOOK DETAILS
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-7">
+
+              <div className="mb-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Information
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Book Details
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Provide additional information about the book.
                 </p>
               </div>
 
-              <label className="flex items-center justify-between">
-                <span className="text-xs">
-                  Available for sale
-                </span>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                <Input
+                  label="ISBN"
+                  placeholder="978-0-0000-0000-0"
+                />
+
+                <Input
+                  label="Publisher"
+                  placeholder="Publisher name"
+                />
+
+                <Input
+                  label="Author"
+                  placeholder="Author name"
+                />
+
+                <Input
+                  label="Publication Date"
+                  type="date"
+                />
+
+                <Input
+                  label="Number of Pages"
+                  placeholder="320"
+                  type="number"
+                />
+
+                <Select
+                  label="Language"
+                  options={[
+                    "English",
+                    "Indonesian",
+                    "Spanish",
+                    "French",
+                  ]}
+                />
+
+                <Select
+                  label="Format"
+                  options={[
+                    "Paperback",
+                    "Hardcover",
+                    "eBook",
+                    "Audiobook",
+                  ]}
+                />
+
+                <Input
+                  label="Edition"
+                  placeholder="First edition"
+                />
+
+              </div>
+
+            </section>
+
+            {/* =================================================
+                PRICING
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-7">
+
+              <div className="mb-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Pricing
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Product Pricing
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Set the selling price and compare-at price for this product.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                <Input
+                  label="Price"
+                  placeholder="₹0.00"
+                  type="number"
+                />
+
+                <Input
+                  label="Compare-at Price"
+                  placeholder="₹0.00"
+                  type="number"
+                />
+
+              </div>
+
+            </section>
+
+            {/* =================================================
+                INVENTORY
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-7">
+
+              <div className="mb-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Inventory
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Stock Management
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Manage stock levels and inventory tracking.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                <Input
+                  label="SKU"
+                  placeholder="BOOK-001"
+                />
+
+                <Input
+                  label="Stock Quantity"
+                  placeholder="0"
+                  type="number"
+                />
+
+              </div>
+
+              <label className="mt-6 flex cursor-pointer items-center gap-3 rounded-xl bg-gray-50 p-4 transition hover:bg-gray-100">
+
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 accent-yellow-400"
+                />
+
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    Track inventory
+                  </p>
+
+                  <p className="mt-0.5 text-xs text-gray-500">
+                    Automatically keep track of available stock.
+                  </p>
+                </div>
+
+              </label>
+
+            </section>
+
+          </main>
+
+          {/* ===================================================
+              RIGHT SIDEBAR
+          =================================================== */}
+          <aside className="flex flex-col gap-6 xl:sticky xl:top-6">
+
+            {/* =================================================
+                STATUS
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+
+              <div className="mb-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Visibility
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Product Status
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Choose how this product appears in your store.
+                </p>
+              </div>
+
+              <div className="relative">
+
+                <select
+                  value={status}
+                  // onChange={(e) => setStatus(e.target.value)}
+                  className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
+                >
+                  <option>Published</option>
+                  <option>Draft</option>
+                  <option>Archived</option>
+                </select>
+
+                <ChevronDown
+                  size={17}
+                  className="pointer-events-none absolute right-4 top-3.5 text-gray-400"
+                />
+
+              </div>
+
+            </section>
+
+            {/* =================================================
+                ORGANIZATION
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+
+              <div className="mb-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Organization
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Product Organization
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Organize your book for easier discovery.
+                </p>
+              </div>
+
+              {/* CATEGORY */}
+              <Select
+                label="Category"
+                options={[
+                  "Books",
+                  "Fiction",
+                  "Non-fiction",
+                  "Education",
+                  "Biography",
+                ]}
+              />
+
+              {/* AUTHOR */}
+              <div className="mt-5">
+
+                <Input
+                  label="Author"
+                  placeholder="Search author..."
+                />
+
+              </div>
+
+              {/* TAGS */}
+              <div className="mt-5">
+
+                <label className="mb-2 block text-xs font-semibold text-gray-700">
+                  Tags
+                </label>
+
+                <div className="flex min-h-[48px] flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-2 transition focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-400/10">
+
+                  {/* Example tags */}
+
+                  {/* 
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700"
+                    >
+                      {tag}
+
+                      <button
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="text-gray-400 hover:text-gray-900"
+                      >
+                        <X size={13} />
+                      </button>
+                    </span>
+                  ))}
+                  */}
+
+                  <input
+                    placeholder="Add tag..."
+                    className="min-w-[80px] flex-1 bg-transparent px-2 text-xs text-gray-900 outline-none placeholder:text-gray-400"
+                  />
+
+                </div>
+
+              </div>
+
+            </section>
+
+            {/* =================================================
+                PUBLISHING
+            ================================================= */}
+            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+
+              <div className="mb-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
+                  Publishing
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-gray-900">
+                  Store Availability
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Control where this product is available.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-gray-50 p-4">
+
+                <div className="flex items-start gap-3">
+
+                  <div className="mt-1 h-2 w-2 rounded-full bg-green-500" />
+
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">
+                      Online Store
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-gray-500">
+                      Product will be visible in your online store.
+                    </p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div className="my-5 border-t border-gray-100" />
+
+              <label className="flex cursor-pointer items-center justify-between gap-4">
+
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    Available for sale
+                  </p>
+
+                  <p className="mt-1 text-xs text-gray-400">
+                    Customers can purchase this product.
+                  </p>
+                </div>
 
                 <input
                   type="checkbox"
                   defaultChecked
-                  className="h-4 w-4"
+                  className="h-5 w-5 shrink-0 rounded border-gray-300 accent-yellow-400"
                 />
+
               </label>
 
-            </div>
-          </section>
-        </aside>
-      </div>
+            </section>
 
-      {/* MOBILE SAVE */}
-      <div className="mt-4 flex justify-end xl:hidden">
-        <button className="h-11 w-full rounded-full bg-[#347ff0] text-sm font-medium text-white">
-          Save product
-        </button>
+          </aside>
+        </div>
+
+        {/* =====================================================
+            MOBILE SAVE
+        ===================================================== */}
+        <div className="mt-6 xl:hidden">
+
+          <button
+            type="button"
+            className="h-12 w-full rounded-xl bg-yellow-400 text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md active:scale-[0.98]"
+          >
+            Save Product
+          </button>
+
+        </div>
+
       </div>
     </div>
   );
@@ -496,7 +724,7 @@ function Select({
       </div>
     </div>
 
-    );
+  );
 }
 
 export default AddBook;

@@ -17,7 +17,6 @@ function OrderManage() {
                 </h1>
             </div>
 
-            {/* grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_245px] not understand  */}
 
             <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_245px]">
                  <div className="flex flex-col gap-4">
