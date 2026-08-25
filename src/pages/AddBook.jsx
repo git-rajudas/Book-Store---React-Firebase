@@ -1,127 +1,135 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createListing } from "../services/product.services";
 import { useAuth } from "../context/AuthContext";
-import { ArrowLeft, ChevronDown, ImagePlus } from 'lucide-react'
+import { ArrowLeft, ChevronDown, ImagePlus, X } from 'lucide-react'
+import Swal from "sweetalert2";
+import Input from "../components/Input";
+import Select from "../components/Select";
+
 function AddBook() {
   const { user } = useAuth();
 
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [isbn, setIsbn] = useState("");
+  const [author, setAuthor] = useState("");
+  const [publisher, setPublisher] = useState("");
+  const [publicationDate,  setPublicationDate] = useState("");
+  const [numberOfPage, setNumberOfPage ] = useState("");
+  const [edition, setEdition] = useState("");
+  const [language, setLanguage ] = useState("");
+  const [format, setFormat ] = useState("");
   const [price, setPrice] = useState("");
+  const [marketprice, setMarketPrice] = useState("");
+  const [sku, setSku ] = useState("");
+  const [quantity, setQuantity ] = useState("");
+  const [trackInventory, setTrackInventory ] = useState(false);
+  const [category, setCategory ] = useState(false);
+  const [visibleOnStore, setVisibleOnStore ] = useState(true);
   const [coverpic, setCoverpic] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [status,setStatus] = useState("")
+
+  const fileInputRef = useRef(null);
+
+
+  const resetForm = () => {
+  setName("");
+  setDescription("");
+  setCoverpic("");
+  setIsbn("");
+  setPublisher("");
+  setAuthor("");
+  setPublicationDate("");
+  setNumberOfPage("");
+  setLanguage("English");
+  setFormat("");
+  setEdition("");
+  setPrice("");
+  setMarketPrice("");
+  setSku("");
+  setQuantity("");
+  setTrackInventory(false);
+  setCategory("");
+  setVisibleOnStore(true);
+  setStatus("");
+};
+
+  // create preview
+  
+
+  const handleFileChanges = (e)=>{
+    const file = e.target.files?.[0];
+    if(!file) return;
+    const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
+    if(!allowedTypes.includes(file.type)){
+      Swal.fire({
+        title: "Image upload failed",
+        text: 'Please upload a PNG, JPG, or WEBP image.',
+        confirmButtonColor: "#facc15",
+      });
+      return;
+    }
+
+    if(file.size > 5*1024*1024){
+      Swal.fire({
+        title: '',
+        text: "",
+        confirmButtonColor: "#facc15",
+      })
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+    setPreview(imageUrl);
+    setCoverpic(file);
+  }
+
+  useEffect(()=>{
+    return () =>{
+      if(preview){
+        URL.revokeObjectURL(preview);
+      }
+    }
+  },[preview]);
+
+  const removeImage = (e) => {
+    e.stopPropagation();
+    if(preview){
+      URL.revokeObjectURL(preview);
+    }
+    setPreview(null);
+    if(fileInputRef.current){
+      fileInputRef.current.value = "";
+    }
+  }
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createListing(user, { name, isbn, price, coverpic });
+    try{
+      await createListing(user, { name,description,coverpic,isbn,publisher,author,publicationDate,numberOfPage,language,format,edition,price, marketprice,sku,quantity,trackInventory,category,visibleOnStore,status });
+      await Swal.fire({
+                  icon: 'success',
+                  title: 'New Book Added',
+                  confirmButtonColor: '#FFD22F'
+              })
+      resetForm();
+    }catch(error){
+      Swal.fire({
+                  icon: 'error',
+                  title: error.message,
+                  text: "Failed to add book",
+              })
+    }
   }
 
-  const Select = ({
-    label,
-    options = [],
-  }) => {
-    return (
-      <div>
-        <label className="mb-2 block text-xs font-semibold text-gray-700">
-          {label}
-        </label>
 
-        <div className="relative">
-          <select
-            className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 text-sm text-gray-700 outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
-          >
-            <option value="">
-              Select {label.toLowerCase()}
-            </option>
 
-            {options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
 
-          <ChevronDown
-            size={17}
-            className="pointer-events-none absolute right-4 top-3.5 text-gray-400"
-          />
-        </div>
-      </div>
-    );
-  };
 
   return (
-    // <div className="">
-    // <section className="text-gray-600 body-font h-full w-full absolute">
-    //         <div className="justify-center flex flex-wrap items-center w-full h-[100%]">
-    //             <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg py-10 px-15 flex flex-col  w-full mt-10 md:mt-0 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)];">
-    //                 <h2 className="text-gray-900 text-2xl font-medium title-font mb-5">
-    //                     Add Book
-    //                 </h2>
-    //                 <div className="relative mb-4">
-    //                     <label htmlFor="bookName" className="leading-7 text-sm text-gray-600">
-    //                         Enter Book Name
-    //                     </label>
-    //                     <input
-    //                         type="text"
-    //                         id="bookName"
-    //                         name="bookName"
-    //                         placeholder="Book Name"
-    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-    //                         onChange={(e) => setName(e.target.value)}
-    //                     ></input>
-    //                 </div>
-    //                 <div className="relative mb-4">
-    //                     <label htmlFor="isbn" className="leading-7 text-sm text-gray-600">
-    //                         Enter ISBN Number
-    //                     </label>
-    //                     <input
-    //                         type="text"
-    //                         id="isbn"
-    //                         name="isbn"
-    //                         placeholder="ISBN"
-    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-    //                         onChange={(e) => setIsbn(e.target.value)}
-    //                     ></input>
-    //                 </div>
-    //                 <div className="relative mb-4">
-    //                     <label htmlFor="price" className="leading-7 text-sm text-gray-600">
-    //                         Enter Book Price
-    //                     </label>
-    //                     <input
-    //                         type="number"
-    //                         id="price"
-    //                         name="price"
-    //                         placeholder="Price"
-    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-    //                         onChange={(e) => setPrice(e.target.value)}
-    //                     ></input>
-    //                 </div>
-    //                 <div className="relative mb-4">
-    //                     <label htmlFor="coverpic" className="leading-7 text-sm text-gray-600">
-    //                         Cover Pic
-    //                     </label>
-    //                     <input
-    //                         type="file"
-    //                         id="coverpic"
-    //                         name="coverpic"
-    //                         className="w-full bg-white rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-    //                         onChange={(e) => setCoverpic(e.target.files[0])}
-    //                     ></input>
-    //                 </div>
-
-    //                 <div className="flex flex-col gap-4">
-    //                     <button
-    //                         className="text-white bg-yellow-500 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-600 rounded-2xl text-lg cursor-pointer shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]"
-    //                         onClick={handleSubmit}
-    //                     >
-    //                         Add
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </section>
-    // </div>
-
     <div className="min-h-screen bg-gray-50 px-4 py-8 font-sans text-gray-900 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
 
@@ -155,20 +163,23 @@ function AddBook() {
             </div>
 
           </div>
-
+         
           {/* ACTIONS */}
           <div className="flex items-center gap-2">
 
             <button
               type="button"
-              className="h-11 rounded-xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 active:scale-[0.98]"
+              className="h-11 rounded-xl border border-gray-200 bg-white px-5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 active:scale-[0.98] cursor-pointer"
+              onClick={()=> resetForm()}
             >
               Cancel
             </button>
 
+
             <button
               type="button"
-              className="h-11 rounded-xl bg-yellow-400 px-6 text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md active:scale-[0.98]"
+              onClick={handleSubmit}
+              className="h-11 rounded-xl bg-yellow-400 px-6 text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md active:scale-[0.98] cursor-pointer"
             >
               Save Product
             </button>
@@ -214,7 +225,9 @@ function AddBook() {
                 <input
                   type="text"
                   placeholder="Enter book title"
+                  value={name}
                   className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
 
@@ -225,6 +238,7 @@ function AddBook() {
                   <label className="text-xs font-semibold text-gray-700">
                     Description
                   </label>
+                  
 
                   <span className="text-[11px] font-medium text-gray-400">
                     0 / 5000
@@ -232,6 +246,8 @@ function AddBook() {
                 </div>
 
                 <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   rows={7}
                   placeholder="Write a description for your book..."
                   className="w-full resize-none rounded-xl border border-gray-200 bg-white p-4 text-sm leading-6 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
@@ -261,7 +277,27 @@ function AddBook() {
               </div>
 
               {/* UPLOAD */}
-              <div className="group flex min-h-[240px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 text-center transition hover:border-yellow-400 hover:bg-yellow-50/40">
+              <div
+              onClick={()=> fileInputRef.current?.click()}
+              className="group flex min-h-[240px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 text-center transition hover:border-yellow-400 hover:bg-yellow-50/40">
+                <input ref={fileInputRef}  type="file" accept="image/png,image/jpeg, image/webp" onChange={handleFileChanges} className="hidden"  />
+                {preview ? (
+                  <>
+                  <div className="relative h-48 w-32 overflow-hidden rounded-lg shadow-md">
+                  <img src={preview} alt="Book cover preview" fill className="object-cover" />
+                  </div>
+                  <p className="mt-3 text-xs font-medium text-gray-600">Click to replace image</p>
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-600 shadow-md transition hover:bg-red-50 hover:text-red-500"
+                  >
+                    <X size={16} />
+                  </button>
+                  </>
+                  
+                ): (
+                  <>
 
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 transition group-hover:scale-105">
                   <ImagePlus
@@ -281,6 +317,8 @@ function AddBook() {
                 <span className="mt-4 rounded-full bg-white px-4 py-2 text-xs font-semibold text-gray-600 shadow-sm ring-1 ring-gray-200">
                   Choose Image
                 </span>
+                  </>
+                )}
 
               </div>
 
@@ -310,37 +348,49 @@ function AddBook() {
                 <Input
                   label="ISBN"
                   placeholder="978-0-0000-0000-0"
+                  value={isbn}
+                  onChange={(e)=> setIsbn(e.target.value)}
                 />
 
                 <Input
                   label="Publisher"
                   placeholder="Publisher name"
+                  value={publisher}
+                  onChange={(e)=> setPublisher(e.target.value)}
                 />
 
                 <Input
                   label="Author"
                   placeholder="Author name"
+                  value={author}
+                  onChange={(e)=> setAuthor(e.target.value)}
                 />
 
                 <Input
                   label="Publication Date"
                   type="date"
+                  value={publicationDate}
+                  onChange={(e)=> setPublicationDate(e.target.value)}
                 />
 
                 <Input
                   label="Number of Pages"
                   placeholder="320"
                   type="number"
+                  value={numberOfPage}
+                  onChange={(e)=> setNumberOfPage(e.target.value)}
                 />
 
                 <Select
                   label="Language"
                   options={[
                     "English",
-                    "Indonesian",
+                    "Bengali",
                     "Spanish",
                     "French",
                   ]}
+                  value={language}
+                  onChange={(e)=> setLanguage(e.target.value)}
                 />
 
                 <Select
@@ -351,11 +401,15 @@ function AddBook() {
                     "eBook",
                     "Audiobook",
                   ]}
+                  value={format}
+                  onChange={(e)=> setFormat(e.target.value)}
                 />
 
                 <Input
                   label="Edition"
                   placeholder="First edition"
+                  value={edition}
+                  onChange={(e)=> setEdition(e.target.value)}
                 />
 
               </div>
@@ -384,15 +438,19 @@ function AddBook() {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
 
                 <Input
-                  label="Price"
+                  label="Sale Price"
                   placeholder="₹0.00"
                   type="number"
+                  value={price}
+                  onChange={(e)=> setPrice(e.target.value)}
                 />
 
                 <Input
-                  label="Compare-at Price"
+                  label="Market Price"
                   placeholder="₹0.00"
                   type="number"
+                  value={marketprice}
+                  onChange={(e)=> setMarketPrice(e.target.value)}
                 />
 
               </div>
@@ -423,12 +481,16 @@ function AddBook() {
                 <Input
                   label="SKU"
                   placeholder="BOOK-001"
+                  value={sku}
+                  onChange={(e)=> setSku(e.target.value)}
                 />
 
                 <Input
                   label="Stock Quantity"
                   placeholder="0"
                   type="number"
+                  value={quantity}
+                  onChange={(e)=> setQuantity(e.target.value)}
                 />
 
               </div>
@@ -438,6 +500,8 @@ function AddBook() {
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded border-gray-300 accent-yellow-400"
+                  value={trackInventory}
+                  onChange={()=> setTrackInventory(!trackInventory)}
                 />
 
                 <div>
@@ -484,7 +548,7 @@ function AddBook() {
 
                 <select
                   value={status}
-                  // onChange={(e) => setStatus(e.target.value)}
+                  onChange={(e) => setStatus(e.target.value)}
                   className="h-12 w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
                 >
                   <option>Published</option>
@@ -530,20 +594,22 @@ function AddBook() {
                   "Education",
                   "Biography",
                 ]}
+                value={category}
+                onChange={(e)=> setCategory(e.target.value)}
               />
 
               {/* AUTHOR */}
-              <div className="mt-5">
+              {/* <div className="mt-5">
 
                 <Input
                   label="Author"
                   placeholder="Search author..."
                 />
 
-              </div>
+              </div> */}
 
               {/* TAGS */}
-              <div className="mt-5">
+              {/* <div className="mt-5">
 
                 <label className="mb-2 block text-xs font-semibold text-gray-700">
                   Tags
@@ -551,9 +617,9 @@ function AddBook() {
 
                 <div className="flex min-h-[48px] flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-2 transition focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-400/10">
 
-                  {/* Example tags */}
 
-                  {/* 
+
+                  
                   {tags.map((tag) => (
                     <span
                       key={tag}
@@ -570,7 +636,7 @@ function AddBook() {
                       </button>
                     </span>
                   ))}
-                  */}
+                 
 
                   <input
                     placeholder="Add tag..."
@@ -579,7 +645,7 @@ function AddBook() {
 
                 </div>
 
-              </div>
+              </div> */}
 
             </section>
 
@@ -640,6 +706,8 @@ function AddBook() {
                   type="checkbox"
                   defaultChecked
                   className="h-5 w-5 shrink-0 rounded border-gray-300 accent-yellow-400"
+                  value={visibleOnStore}
+                  onChange={(e)=> setVisibleOnStore(e.target.value)}
                 />
 
               </label>
@@ -664,66 +732,8 @@ function AddBook() {
         </div>
 
       </div>
+
     </div>
-  );
-}
-
-
-/* ============================================================
-   REUSABLE INPUT
-============================================================ */
-
-function Input({
-  label,
-  placeholder,
-  type = "text",
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-xs font-medium">
-        {label}
-      </label>
-
-      <input
-        type={type}
-        placeholder={placeholder}
-        className="h-11 w-full rounded-[10px] border border-gray-200 px-3 text-sm outline-none transition placeholder:text-gray-400 focus:border-blue-400"
-      />
-    </div>
-  );
-}
-
-
-/* ============================================================
-   REUSABLE SELECT
-============================================================ */
-
-function Select({
-  label,
-  options,
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-xs font-medium">
-        {label}
-      </label>
-
-      <div className="relative">
-        <select className="h-11 w-full appearance-none rounded-[10px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-400">
-          {options.map((option) => (
-            <option key={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-
-        <ChevronDown
-          size={16}
-          className="pointer-events-none absolute right-3 top-3 text-gray-400"
-        />
-      </div>
-    </div>
-
   );
 }
 

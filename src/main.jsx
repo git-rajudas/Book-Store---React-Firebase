@@ -8,6 +8,7 @@ import { CartContextProvider } from "./context/CartContext.jsx";
 import { UserContextProvider } from "./context/UserContext.jsx";
 import { SellerContextProvider } from "./context/SellerContext.jsx";
 
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>

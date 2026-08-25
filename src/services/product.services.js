@@ -11,6 +11,7 @@ export const addProduct = async (data) => {
             ...data,
             createdAt: serverTimestamp(),
         });
+        
         return docRef.id;
     } catch (error) {
         console.error("Error adding product: ", error);
@@ -20,27 +21,65 @@ export const addProduct = async (data) => {
 };
 
 
-export const createListing = async (user, { name, isbn, price, coverpic }) => {
-    const imageURL = await uploadImage(coverpic);
-    console.log(imageURL)
-    return addProduct({
-        name: name.trim(),
-        isbn: isbn.trim(),
-        price: Number(price),
-        imageURL,
-        userID: user.uid,
-        userEmail: user.email,
-        displayName: user.displayName || "",
-        photoURL: user.photoURL || "",
+export const createListing = async (
+  user,
+  {
+    name,
+    description,
+    coverpic,
+    isbn,
+    publisher,
+    author,
+    publicationDate,
+    numberOfPage,
+    language,
+    format,
+    edition,
+    price,
+    marketprice,
+    sku,
+    quantity,
+    trackInventory,
+    category,
+    visibleOnStore,
+    status,
+  },
+) => {
+  const imageURL = await uploadImage(coverpic);
+  console.log(imageURL);
+  return addProduct({
+    name: name.trim(),
+    description: description,
+    isbn: isbn.trim(),
+    price: Number(price),
+    imageURL,
+    publisher: publisher.trim(),
+    author: author.trim(),
+    publicationDate: publicationDate,
+    numberOfPage: Number(numberOfPage),
+    language: language,
+    format: format,
+    edition: edition,
+    marketprice: Number(marketprice),
+    sku: sku.trim(),
+    quantity: Number(quantity),
+    trackInventory: trackInventory,
+    category: category,
+    visibleOnStore: visibleOnStore,
+    
 
-        sellerId: user.uid,
-        sellerName: user.displayName || "",
-        status: "available",
-        stock: 1,
+    userID: user.uid,
+    userEmail: user.email,
+    displayName: user.displayName || "",
+    photoURL: user.photoURL || "",
 
-        createdAt: serverTimestamp(),
+    sellerId: user.uid,
+    sellerName: user.displayName || "",
+    status: status, 
+    stock: 1,
 
-    });
+    createdAt: serverTimestamp(),
+  });
 };
 
 

@@ -1,7 +1,6 @@
 import { NavLink } from "react-router";
 import {
   RiShoppingBag3Fill,
-  RiStickyNoteAddFill,
   RiBookShelfLine,
   RiArrowDropDownLine,
   RiLogoutCircleRLine
@@ -169,19 +168,6 @@ function Navbar() {
     {/* Right Actions */}
     <div className="flex items-center gap-3">
 
-      {/* Add Book */}
-      <NavLink
-        to="/book/addbook"
-        className="hidden sm:block"
-      >
-        <button
-          type="button"
-          className="flex items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition-all hover:bg-yellow-500 hover:shadow-md active:scale-95"
-        >
-          <span>Add Book</span>
-          <RiStickyNoteAddFill size={17} />
-        </button>
-      </NavLink>
 
       {/* Cart */}
       <NavLink

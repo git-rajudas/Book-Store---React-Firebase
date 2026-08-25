@@ -1,3 +1,4 @@
+
 import { Route, Routes } from "react-router"
 import ProtectedRoute from "./components/ProtectedRoute"
 import SignUp from "./pages/SignUp"

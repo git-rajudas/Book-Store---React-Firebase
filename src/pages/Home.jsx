@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import Card from "../components/Card"
 
 import { getProducts } from "../services/product.services";
-import { useAuth } from "../context/AuthContext";
 
 function Home() {
-  
-  const { user } = useAuth();
+
   
   const [products , setProducts] = useState([]);
   
@@ -15,10 +13,12 @@ function Home() {
     const fetchProducts = async () => {
       const data = await getProducts();
       setProducts(data);
+      console.log(data);
+      
     };
 
     fetchProducts();
-  },[user])
+  },[])
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
