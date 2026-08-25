@@ -4,16 +4,23 @@ import DashboardNavbar from "../DashboardNavbar"
 
 function DashboardLayout() {
   return (
-    <div className="h-screen flex w-full overflow-hidden">
-    <DashboardSidebar />
-      <div className="flex flex-1 flex-col">
-        <DashboardNavbar/>
-      
-          <main className="flex-1 mt-20 overflow-y-auto bg-[#F6F6F6]">
-          <div className="p-10">
-            <Outlet/>
+    <div className="min-h-screen bg-[#f5f5f5] text-[#171717]">
+
+      {/* Sidebar */}
+      <DashboardSidebar />
+
+      {/* Main Area */}
+      <div className="lg:ml-[260px]">
+
+        {/* Navbar */}
+        <DashboardNavbar />
+
+        {/* Content */}
+        <main className="min-h-screen pt-[76px]">
+          <div className="px-4 py-6 sm:px-6 lg:px-8 xl:px-10">
+            <Outlet />
           </div>
-          </main>
+        </main>
 
       </div>
     </div>
