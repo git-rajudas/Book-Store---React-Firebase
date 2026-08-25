@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { RiShoppingBag3Line, RiHeartLine } from '@remixicon/react';
 
 import { getProduct } from "../services/product.services";
+import { ShieldCheck, ShieldLock, Truck, Undo2 } from "lucide-react";
 
 function Bookpage() {
   const { id } = useParams();
@@ -496,7 +497,7 @@ function Bookpage() {
           {/* Delivery */}
           <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-100 text-xl transition-colors group-hover:bg-yellow-400">
-              🚚
+              <Truck/> 
             </div>
 
             <h3 className="mt-5 font-bold text-slate-900">
@@ -511,7 +512,7 @@ function Bookpage() {
           {/* Payment */}
           <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-100 text-xl transition-colors group-hover:bg-green-400">
-              🔒
+              <ShieldLock/>
             </div>
 
             <h3 className="mt-5 font-bold text-slate-900">
@@ -526,7 +527,7 @@ function Bookpage() {
           {/* Returns */}
           <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-xl transition-colors group-hover:bg-blue-400">
-              ↩️
+              <Undo2/>
             </div>
 
             <h3 className="mt-5 font-bold text-slate-900">
@@ -541,7 +542,7 @@ function Bookpage() {
           {/* Quality */}
           <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-100 text-xl transition-colors group-hover:bg-purple-400">
-              📚
+              <ShieldCheck />
             </div>
 
             <h3 className="mt-5 font-bold text-slate-900">
