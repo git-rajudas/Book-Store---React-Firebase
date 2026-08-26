@@ -91,7 +91,7 @@ function Login() {
 
                     {/* Add your forgot password route here if needed */}
                     <Link
-                      to="/forgetpassword"
+                      to="/reset-password"
                       className="text-xs font-medium text-gray-500 transition hover:text-gray-900"
                     >
                       Forgot password?
