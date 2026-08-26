@@ -22,6 +22,7 @@ import Setting from "./pages/Setting"
 import OrderManage from "./pages/OrderManage"
 import AboutUs from "./pages/AboutUs"
 import ContactUs from "./pages/ContactUs"
+import ForgetPassword from "./pages/ForgetPassword"
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
       </Route>
       <Route path="/login" element={ <PublicRoute> <Login /> </PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><SignUp /> </PublicRoute>}/>
+      <Route path="/reset-password" element={<PublicRoute><ForgetPassword /> </PublicRoute>}/>
     </Routes>
   )
 }

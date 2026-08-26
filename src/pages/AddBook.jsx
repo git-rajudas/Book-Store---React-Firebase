@@ -73,8 +73,8 @@ function AddBook() {
 
     if(file.size > 5*1024*1024){
       Swal.fire({
-        title: '',
-        text: "",
+        title: "File Too Large",
+        text: "Please upload a file smaller than 5 MB",
         confirmButtonColor: "#facc15",
       })
       return;

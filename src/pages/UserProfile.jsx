@@ -11,8 +11,8 @@ import Swal from "sweetalert2";
 
 import { useAuth } from "../context/AuthContext";
 import { useUser } from "../context/UserContext";
-import { sendUserEmailVerification } from "../services/user.services";
-import { useState } from "react";
+import { sendUserEmailVerification, updateUserInfo } from "../services/user.services";
+import { useEffect, useRef, useState } from "react";
 
 
 import { uploadProfileImage } from "../services/cloudinary.services"
@@ -22,6 +22,7 @@ import { updateUserProfilePic, updateUserShippingAddress, updateUserBillingAddre
 import Popup from "../components/Popup";
 import { Link } from "react-router";
 import { useSeller } from "../context/SellerContext";
+import { X } from "lucide-react";
 
 function UserProfile() {
     const { user, loading } = useAuth();
@@ -30,7 +31,18 @@ function UserProfile() {
 
 
     const [profilepic, setProfilepic] = useState(null)
-    const [isOpen, setIsOpen] = useState(false);
+
+    const [newName, setName] = useState("");
+    const [newEmail, setNewemail] = useState("");
+    const [newPhoneNumber, setNewNumber] = useState("");
+    const [editProfile,setEidtProfile] = useState(false);
+    const [editProfilePic,setEidtProfilePic] = useState(false);
+
+    // Preview Profile Pic
+    const [preview, setPreview] = useState(null);
+    const picFileInputRef = useRef(null);
+
+
     const [editShippingAdd, setEditShippingAdd] = useState(false);
     const [editBillingAddress, SetEditBillingAddress] = useState(false);
 
@@ -56,10 +68,36 @@ function UserProfile() {
             return;
         }
         try {
+            const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
+            if(!allowedTypes.includes(profilepic.type)){
+                Swal.fire({
+                        title: "Image upload failed",
+                        text: 'Please upload a PNG, JPG, or WEBP image.',
+                        confirmButtonColor: "#facc15",
+                    });
+                    return;
+            }
+            if(profilepic.size > 5*1024*1024){
+                Swal.fire({
+                        title: "File Too Large",
+                        text: 'Please upload a file smaller than 5 MB.',
+                        confirmButtonColor: "#facc15",
+                    });
+                    return;
+            }
+
+            // Preview Url Create
+            const imageUrl = URL.createObjectURL(profilepic);
+            
+            setPreview(imageUrl); 
+
+            //Upload On Cloudinary
+
             const photoURL = await uploadProfileImage(profilepic);
             try {
                 if (!photoURL) return;
                 await updateUserProfilePic(user, photoURL);
+                setEidtProfile(false)
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -68,7 +106,7 @@ function UserProfile() {
                 })
             }
 
-            setIsOpen(false);
+            setProfilepic(null);
 
         } catch (error) {
             Swal.fire({
@@ -79,6 +117,25 @@ function UserProfile() {
         }
 
     }
+
+    useEffect(()=>{
+        return () =>{
+            if(preview){
+                URL.revokeObjectURL(preview);
+            }
+        }
+    },[preview])
+
+    const removeImage = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setPreview(null);
+        setProfilepic(null)
+        if(picFileInputRef.current){
+        picFileInputRef.current.value = "";
+        }
+  }
 
     const handleShippingAddress = async (e) => {
         e.preventDefault();
@@ -146,6 +203,30 @@ function UserProfile() {
     }
 
 
+    const handleProfileDetails = async (e) => {
+        e.preventDefault();
+        if (!newName || !newEmail || !newPhoneNumber) {
+            Swal.fire({
+                icon: "warning",
+                title: "Please fill all fields",
+                confirmButtonColor: "#facc15",
+            });
+            return;
+        }
+        try{
+            await updateUserInfo(user, newName, newPhoneNumber, newEmail);
+            setEidtProfile(false)
+        }catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: error.message,
+                confirmButtonColor: "#facc15",
+            })
+        }
+
+    }
+
+
 if (loading) {
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#f5f5f5]">
@@ -190,6 +271,7 @@ return (
 
                 <button
                     type="button"
+                    onClick={() => setEidtProfile(true)}
                     className="
                         inline-flex
                         h-10
@@ -257,7 +339,7 @@ return (
 
                         <button
                             type="button"
-                            onClick={() => setIsOpen(true)}
+                            onClick={() => setEidtProfilePic(true)}
                             className="
                                 absolute
                                 bottom-0
@@ -502,7 +584,7 @@ return (
 
                                 <tbody>
 
-                                    {ListedProduct.map((item) => (
+                                    {ListedProduct.slice(0,5).map((item) => (
 
                                         <tr
                                             key={item.id}
@@ -540,7 +622,7 @@ return (
                     )}
 
                     <div className="mt-4 text-center text-xs font-medium text-gray-500 hover:text-gray-900 cursor-pointer">
-                        View all books
+                        <Link to="/seller/products">View all books</Link>
                     </div>
 
                 </section>
@@ -562,9 +644,9 @@ return (
                             </p>
                         </div>
 
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-50 text-gray-500">
+                        <Link to="/seller/orders" className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-50 text-gray-500">
                             <RiEyeLine size={18} />
-                        </div>
+                        </Link>
 
                     </div>
 
@@ -589,7 +671,7 @@ return (
 
                     ) : (
 
-                        <div className="overflow-x-auto rounded-xl border border-gray-100">
+                        <div className="overflow-hidden rounded-xl border border-gray-100">
 
                             <table className="w-full min-w-[650px] text-left">
 
@@ -619,7 +701,7 @@ return (
 
                                 <tbody>
 
-                                    {sellerOrders.map((order) => (
+                                    {sellerOrders.slice(0,5).map((order) => (
 
                                         <tr
                                             key={order.id}
@@ -689,8 +771,8 @@ return (
 
                     )}
 
-                    <div className="mt-4 text-center text-xs font-medium text-gray-500 hover:text-gray-900 cursor-pointer">
-                        Manage orders
+                    <div className="mt-4 text-center text-xs font-medium text-yellow-500 hover:text-gray-500 cursor-pointer">
+                        <Link to='/seller/orders'>Manage orders</Link>
                     </div>
 
                 </section>
@@ -820,7 +902,7 @@ return (
 
                             <tbody>
 
-                                {buyerOders.map((order) => (
+                                {buyerOders.slice(0,10).map((order) => (
 
                                     <tr
                                         key={order.id}
@@ -1198,13 +1280,13 @@ return (
         ====================================================== */}
 
         <Popup
-            isOpen={isOpen}
+            isOpen={editProfilePic}
             btnText="Submit"
-            onClose={() => isOpen(false)}
+            onClose={() => setEidtProfilePic(false)}
             onSubmit={handleUploadProfilePic}
         >
 
-            <div className="w-full rounded-[17px] bg-white p-5">
+            <div className="w-full rounded-[17px] bg-white p-5" >
 
                 <div className="mb-5">
 
@@ -1221,6 +1303,7 @@ return (
 
                 <label
                     htmlFor="uploadProfile"
+                    onClick={() => picFileInputRef.current?.click()}
                     className="
                         group
                         flex
@@ -1241,32 +1324,53 @@ return (
                         hover:bg-yellow-50
                     "
                 >
+                    {preview ? (
+                        <>
+                            <div className="relative h-32 w-32 overflow-hidden rounded-lg shadow-md">
+                                <img src={preview} alt="Book cover preview" fill className="object-cover" />
+                            </div>
 
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-gray-500 shadow-sm transition group-hover:text-yellow-600">
-                        <RiImageUploadLine size={24} />
-                    </div>
+                            <p className="mt-3 text-xs font-medium text-gray-600">Click to replace image</p>
+                            <button
+                                type="button"
+                                onClick={removeImage}
+                                className=" mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-600 shadow-md transition hover:bg-red-50 hover:text-red-500"
+                            >
+                                <X size={16} />
+                            </button>
+                        </>) : (<>
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-gray-500 shadow-sm transition group-hover:text-yellow-600">
+                                <RiImageUploadLine size={24} />
+                            </div>
 
-                    <p className="text-sm font-medium text-gray-800">
-                        Upload profile picture
-                    </p>
+                            <p className="text-sm font-medium text-gray-800">
+                                Upload profile picture
+                            </p>
 
-                    <p className="mt-1 text-xs text-gray-400">
-                        Click to choose an image
-                    </p>
+                            <p className="mt-1 text-xs text-gray-400">
+                                Click to choose an image
+                            </p>
 
-                    {profilepic && (
-                        <div className="mt-4 max-w-full truncate rounded-lg border border-yellow-100 bg-yellow-50 px-3 py-2 text-xs text-gray-700">
-                            {profilepic.name}
-                        </div>
-                    )}
+                        </>)}
+
+
+
 
                     <input
                         type="file"
                         accept="image/*"
                         id="uploadProfile"
                         hidden
-                        onChange={(e) =>
-                            setProfilepic(e.target.files[0])
+                        ref={picFileInputRef}
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            setProfilepic(file);
+                            // Show preview immediately
+                            const imageUrl = URL.createObjectURL(file);
+                            setPreview(imageUrl);
+
+                        }
                         }
                     />
 
@@ -1275,7 +1379,134 @@ return (
             </div>
 
         </Popup>
+                    
 
+        
+        {/* =====================================================
+            edit Profile popup
+        ======================================================  */}
+
+        <Popup
+            isOpen={editProfile}
+            btnText="Save Profile"
+            onClose={() => setEidtProfile(false)}
+            onSubmit={handleProfileDetails}
+        >
+
+            <div className="w-full rounded-[17px] bg-white p-5 sm:p-6">
+
+                <div className="mb-6">
+
+                    <h3 className="text-lg font-semibold text-gray-900">
+                        Profile Details
+                    </h3>
+
+                    <p className="mt-1 text-xs text-gray-500">
+                        Enter your Details.
+                    </p>
+
+                </div>
+
+
+                <div className="space-y-4">
+
+                    <div>
+                        <label
+                            htmlFor="add1"
+                            className="mb-2 block text-xs font-medium text-gray-700"
+                        >
+                            Name
+                        </label>
+
+                        <input
+                            id="add1"
+                            type="text"
+                            placeholder="Raju Das"
+                            onChange={(e) => setName(e.target.value)}
+                            className="
+                                h-11
+                                w-full
+                                rounded-[10px]
+                                border
+                                border-gray-200
+                                px-3
+                                text-sm
+                                outline-none
+                                transition
+                                focus:border-yellow-400
+                                focus:ring-4
+                                focus:ring-yellow-50
+                            "
+                        />
+                    </div>
+
+
+                    <div>
+                        <label
+                            htmlFor="newEmail"
+                            className="mb-2 block text-xs font-medium text-gray-700"
+                        >
+                            New Email
+                        </label>
+
+                        <input
+                            id="newEmail"
+                            type="email"
+                            placeholder="yourmail@gmail.com"
+                            onChange={(e) => setNewemail(e.target.value)}
+                            className="
+                                h-11
+                                w-full
+                                rounded-[10px]
+                                border
+                                border-gray-200
+                                px-3
+                                text-sm
+                                outline-none
+                                transition
+                                focus:border-yellow-400
+                                focus:ring-4
+                                focus:ring-yellow-50
+                            "
+                        />
+                    </div>
+
+
+                    <div>
+                        <label
+                            htmlFor="newPhoneNumber"
+                            className="mb-2 block text-xs font-medium text-gray-700"
+                        >
+                            New Phone Number
+                        </label>
+
+                        <input
+                            id="newPhoneNumber"
+                            type="phone"
+                            placeholder="987654321"
+                            onChange={(e) => setNewNumber(e.target.value)}
+                            className="
+                                h-11
+                                w-full
+                                rounded-[10px]
+                                border
+                                border-gray-200
+                                px-3
+                                text-sm
+                                outline-none
+                                transition
+                                focus:border-yellow-400
+                                focus:ring-4
+                                focus:ring-yellow-50
+                            "
+                        />
+                    </div>
+
+                </div>
+
+            </div>
+
+        </Popup>
 
         {/* =====================================================
             SHIPPING POPUP

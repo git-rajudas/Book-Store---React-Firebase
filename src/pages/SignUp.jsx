@@ -13,12 +13,10 @@ function SignUp() {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
-    console.log(Number);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
         const user = await signUp(email, password);
-        console.log(user);
         await addUser({
             uid: user.uid,
             displayName: name || "",
@@ -69,7 +67,7 @@ function SignUp() {
         {/* =================================================
             FORM
         ================================================= */}
-        <div className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
           {/* FULL NAME */}
           <div>
@@ -168,9 +166,8 @@ function SignUp() {
               SIGN UP
           ================================================= */}
           <button
-            type="button"
+            type="submit"
             className="flex h-12 w-full items-center justify-center rounded-xl bg-yellow-400 px-6 text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-500 hover:shadow-md active:scale-[0.98]"
-            onClick={handleSubmit}
           >
             Create Account
           </button>
@@ -210,7 +207,7 @@ function SignUp() {
             </span>
           </button>
 
-        </div>
+        </form>
 
         {/* =================================================
             LOGIN LINK

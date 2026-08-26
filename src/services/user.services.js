@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 
 
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp,deleteDoc} from "firebase/firestore";
-import { updateEmail, updatePassword, updateProfile, sendEmailVerification, deleteUser } from "firebase/auth";
+import { updateEmail, updatePassword, updateProfile, sendEmailVerification, deleteUser, sendPasswordResetEmail } from "firebase/auth";
 import { db } from "../firebase/config";
 import { auth } from "../firebase/config";
 
@@ -165,7 +165,24 @@ export const updateUserPassword = async (password) => {
     })
 }
 
-// start Update User info functions
+// start Update User info (Name, Phone, Email)
+
+export const updateUserInfo = async (user, newName, newPhoneNumber, newEmail) => {
+    const userRef = doc (db, "Users", user.uid);
+    try{
+        await updateDoc(userRef, {
+            displayName: newName || "",
+            phoneNumber: newPhoneNumber || ""
+        })
+        await updateUserEmail(user, newEmail);
+    }catch(error){
+        Swal.fire({
+            icon: "error",
+            title: error.message,
+            confirmButtonColor: "#facc15",
+        });
+    }
+}
 
 
 // send email verification
@@ -188,6 +205,23 @@ export const sendUserEmailVerification = async (user) => {
     }
 
 
+}
+
+// send password reset email
+
+export const sendUserPasswordResetEmail = async (auth, email) => {
+    try{
+        await sendPasswordResetEmail(auth, email);
+        return {
+            success: true,
+        };
+    }catch(error){
+        return {
+            success: false,
+            error,
+        };
+          
+    }
 }
 
 // Delete the user from document or auth
