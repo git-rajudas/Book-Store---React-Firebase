@@ -20,6 +20,8 @@ import Products from "./pages/Products"
 import Paymets from "./pages/Paymets"
 import Setting from "./pages/Setting"
 import OrderManage from "./pages/OrderManage"
+import AboutUs from "./pages/AboutUs"
+import ContactUs from "./pages/ContactUs"
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
     <Routes>
       <Route element={<Layout/>}>
         <Route path="/" element={<Home/>}/>
+        <Route path="/about" element={<AboutUs/>}/>
+        <Route path="/contact" element={<ContactUs/>}/>
         <Route path="/book/addbook" element={<ProtectedRoute> <AddBook /> </ProtectedRoute>}/>
         <Route path="/book/:id" element={<ProtectedRoute> <Bookpage /> </ProtectedRoute>}/>
         <Route path="/my-account" element={<ProtectedRoute><UserProfile /> </ProtectedRoute>}/>
