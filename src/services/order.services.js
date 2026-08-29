@@ -42,7 +42,7 @@ export const createOrder = async (user, item, shippingAddress, shippingMethod, p
 
             // seller
 
-            sellerId: item.sellerId,
+            sellerIds: [item.sellerId],
             sellerName: item.sellerName || "",
 
             // book

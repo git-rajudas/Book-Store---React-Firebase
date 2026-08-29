@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router";
 import { createListing } from "../services/product.services";
 import { useAuth } from "../context/AuthContext";
 import { ArrowLeft, ChevronDown, ImagePlus, X } from 'lucide-react'
@@ -145,7 +146,9 @@ function AddBook() {
               type="button"
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-gray-900 active:scale-95"
             >
+              <Link to="/seller/products" >
               <ArrowLeft size={19} />
+              </Link>
             </button>
 
             <div>

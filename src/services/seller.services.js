@@ -18,8 +18,11 @@ import Swal from "sweetalert2";
 // Get seller orders
 
 export const getSellerOrders =  async (user) => {
+    const sellerUid = user?.uid;
+    if (!sellerUid) return [];
+    
     try{
-        const q = query(collection(db, "Orders"), where("sellerIds", "array-contains", user?.uid));
+        const q = query(collection(db, "Orders"), where("sellerIds", "array-contains", sellerUid));
         
         const snapshot = await getDocs(q);
 
@@ -30,7 +33,7 @@ export const getSellerOrders =  async (user) => {
                 id: doc.id,
                 ...doc.data(),
 
-                items: data.items?.filter((item) => item.sellerId === user?.uid)|| [],
+                items: data.items?.filter((item) => item.sellerId === sellerUid)|| [],
             }
             
         });
@@ -46,13 +49,13 @@ export const getSellerOrders =  async (user) => {
     }
 }
 
-export const getSellerSales = async (sellerId) => {
+// export const getSellerSales = async (sellerId) => {
 
-}
+// }
 
-export const getSellerCustomers = async (sellerId) => {
+// export const getSellerCustomers = async (sellerId) => {
 
-}
+// }
 
 
 //  update order status
