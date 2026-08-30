@@ -18,6 +18,9 @@ function Bookpage() {
     fetchProductDetails();
   }, [id]);
 
+  console.log(productDetails);
+  
+
   if (!productDetails) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center bg-gray-50">
@@ -215,8 +218,8 @@ function Bookpage() {
                 </p>
 
                 <p className="text-xs text-green-700">
-                  {productDetails.quantity
-                    ? `${productDetails.quantity} copies available`
+                  {productDetails.stock
+                    ? `${productDetails.stock} copies available`
                     : "Available for purchase"}
                 </p>
               </div>
@@ -435,7 +438,7 @@ function Bookpage() {
               </span>
 
               <span className="font-bold text-slate-900">
-                {productDetails.quantity ?? "—"}
+                {productDetails.stock ?? "—"}
               </span>
             </div>
 

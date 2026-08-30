@@ -38,7 +38,7 @@ export const createListing = async (
     price,
     marketprice,
     sku,
-    quantity,
+    stock,
     trackInventory,
     category,
     visibleOnStore,
@@ -62,7 +62,7 @@ export const createListing = async (
     edition: edition,
     marketprice: Number(marketprice),
     sku: sku.trim(),
-    quantity: Number(quantity),
+    stock: Number(stock),
     trackInventory: trackInventory,
     category: category,
     visibleOnStore: visibleOnStore,
@@ -75,8 +75,7 @@ export const createListing = async (
 
     sellerId: user.uid,
     sellerName: user.displayName || "",
-    status: status, 
-    stock: 1,
+    status: status,
 
     createdAt: serverTimestamp(),
   });

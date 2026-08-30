@@ -46,11 +46,19 @@ export const createOrder = async (user, item, shippingAddress, shippingMethod, p
             sellerName: item.sellerName || "",
 
             // book
-            productId: item.id,
-            productTitle: item.name,
-            productImage: item.imageURL || "",
-            price: Number(item.price),
-            quantity: 1,
+            items: [
+                {
+                    productId: item.id,
+                    productTitle: item.name,
+                    productImage: item.imageURL || "",
+                    price: Number(item.price),
+                    quantity: 1,
+
+                    sellerId: item.sellerId,
+                    sellerName: item.sellerName || "",
+                }
+            ],
+            
 
             // delivery address
             shippingMethod: shippingMethod,

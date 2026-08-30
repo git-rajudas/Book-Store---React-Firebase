@@ -95,6 +95,8 @@ function CheckoutPage() {
         try{
             if(ItemId){
                 const orderId = await createOrder(user,item,shippingAddress,shippingMethod, paymentMethod) 
+                console.log("Order Single Order");
+                
                 if(!orderId){
                   return;
                 }

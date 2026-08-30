@@ -45,8 +45,11 @@ function Popup({
           </button>
 
           <button
-            type="button"
-            onClick={onSubmit}
+            type='button'
+            onClick={async (e)=> {
+              await onSubmit(e);
+              onClose();
+            }}
             className="rounded-xl bg-yellow-400 px-5 py-3 text-sm font-semibold text-gray-900 shadow-sm transition-all hover:bg-yellow-500 hover:shadow-md active:scale-95"
           >
             {btnText}

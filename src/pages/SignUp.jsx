@@ -104,7 +104,7 @@ function SignUp() {
               id="phone"
               name="phone"
               required
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              pattern="[0-9]{10}"
               placeholder="Enter your phone number"
               autoComplete="tel"
               className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
@@ -112,7 +112,7 @@ function SignUp() {
             />
 
             <p className="mt-1.5 text-[11px] text-gray-400">
-              Example: 123-456-7890
+              Example: 9748425100
             </p>
           </div>
 

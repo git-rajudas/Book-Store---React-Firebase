@@ -18,12 +18,12 @@ function AddBook() {
   const [publicationDate,  setPublicationDate] = useState("");
   const [numberOfPage, setNumberOfPage ] = useState("");
   const [edition, setEdition] = useState("");
-  const [language, setLanguage ] = useState("");
-  const [format, setFormat ] = useState("");
+  const [language, setLanguage ] = useState("English");
+  const [format, setFormat ] = useState("Paperback");
   const [price, setPrice] = useState("");
   const [marketprice, setMarketPrice] = useState("");
   const [sku, setSku ] = useState("");
-  const [quantity, setQuantity ] = useState("");
+  const [stock, setStock ] = useState("");
   const [trackInventory, setTrackInventory ] = useState(false);
   const [category, setCategory ] = useState(false);
   const [visibleOnStore, setVisibleOnStore ] = useState(true);
@@ -37,23 +37,24 @@ function AddBook() {
   const resetForm = () => {
   setName("");
   setDescription("");
-  setCoverpic("");
+  setCoverpic(null);
   setIsbn("");
   setPublisher("");
   setAuthor("");
   setPublicationDate("");
   setNumberOfPage("");
   setLanguage("English");
-  setFormat("");
+  setFormat("Paperback");
   setEdition("");
   setPrice("");
   setMarketPrice("");
   setSku("");
-  setQuantity("");
+  setStock("");
   setTrackInventory(false);
   setCategory("");
   setVisibleOnStore(true);
   setStatus("");
+  removeImage();
 };
 
   // create preview
@@ -95,7 +96,7 @@ function AddBook() {
   },[preview]);
 
   const removeImage = (e) => {
-    e.stopPropagation();
+    e?.stopPropagation();
     if(preview){
       URL.revokeObjectURL(preview);
     }
@@ -110,7 +111,7 @@ function AddBook() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      await createListing(user, { name,description,coverpic,isbn,publisher,author,publicationDate,numberOfPage,language,format,edition,price, marketprice,sku,quantity,trackInventory,category,visibleOnStore,status });
+      await createListing(user, { name,description,coverpic,isbn,publisher,author,publicationDate,numberOfPage,language,format,edition,price, marketprice,sku,stock,trackInventory,category,visibleOnStore,status });
       await Swal.fire({
                   icon: 'success',
                   title: 'New Book Added',
@@ -492,8 +493,8 @@ function AddBook() {
                   label="Stock Quantity"
                   placeholder="0"
                   type="number"
-                  value={quantity}
-                  onChange={(e)=> setQuantity(e.target.value)}
+                  value={stock}
+                  onChange={(e)=> setStock(e.target.value)}
                 />
 
               </div>
@@ -596,6 +597,8 @@ function AddBook() {
                   "Non-fiction",
                   "Education",
                   "Biography",
+                  "Business",
+                  "Self-Help & Wellness",
                 ]}
                 value={category}
                 onChange={(e)=> setCategory(e.target.value)}

@@ -20,7 +20,6 @@ export const AuthContextProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(
             auth,
             (currentUser) => {
-                console.log("Firebase auth:", currentUser);
 
                 setUser(currentUser);
                 setLoading(false);

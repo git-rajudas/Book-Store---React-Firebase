@@ -23,7 +23,7 @@ import OrderManage from "./pages/OrderManage"
 import AboutUs from "./pages/AboutUs"
 import ContactUs from "./pages/ContactUs"
 import ForgetPassword from "./pages/ForgetPassword"
-// import Shop from "./pages/Shop"
+import Shop from "./pages/Shop"
 
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
       <Route element={<Layout/>}>
         <Route path="/" element={<Home/>}/>
         <Route path="/about" element={<AboutUs/>}/>
-        {/* <Route path="/shop" element={<Shop/>}/> */}
+        <Route path="/shop" element={<Shop/>}/>
         <Route path="/contact" element={<ContactUs/>}/>
         <Route path="/book/addbook" element={<ProtectedRoute> <AddBook /> </ProtectedRoute>}/>
         <Route path="/book/:id" element={<ProtectedRoute> <Bookpage /> </ProtectedRoute>}/>

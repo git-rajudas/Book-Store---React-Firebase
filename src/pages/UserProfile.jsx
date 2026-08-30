@@ -22,10 +22,10 @@ import { updateUserProfilePic, updateUserShippingAddress, updateUserBillingAddre
 import Popup from "../components/Popup";
 import { Link } from "react-router";
 import { useSeller } from "../context/SellerContext";
-import { X } from "lucide-react";
+import { UserRound, X } from "lucide-react";
 
 function UserProfile() {
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     const { userData, buyerOders } = useUser();
     const { ListedProduct, sellerOrders } = useSeller();
 
@@ -227,9 +227,9 @@ function UserProfile() {
     }
 
 
-if (loading) {
+if (!userData) {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[#f5f5f5]">
+        <div className="flex min-h-screen items-center justify-center ">
             <div className="flex flex-col items-center gap-3">
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-yellow-200 border-t-yellow-500" />
                 <p className="text-xs text-gray-400">
@@ -317,14 +317,13 @@ return (
                             h-28
                             w-28
                             rounded-full
-                            bg-yellow-50
+                            bg-yellow-100
                             p-1
                             sm:h-32
                             sm:w-32
                         ">
-
-                            <img
-                                src={userData?.photoURL}
+                            {userData?.photoURL ? (<img
+                                src={userData?.photoURL }
                                 alt=""
                                 className="
                                     h-full
@@ -333,7 +332,14 @@ return (
                                     bg-gray-100
                                     object-cover
                                 "
-                            />
+                            />):(
+                                <div className="h-27 w-27 sm:h-30 sm:w-30 p-2 flex justify-center items-center rounded-full  bg-gray-100 object-cover">
+                                    <UserRound size={50}/>
+                                </div>
+
+                            )
+                            }
+                            
 
                         </div>
 
